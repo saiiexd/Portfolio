@@ -11,13 +11,16 @@ import { getFeaturedProjects } from '@/content/projects'
 import { SITE_CONFIG, RESUME_PATH } from '@/lib/constants'
 import { categoryLabel } from '@/lib/utils'
 import ProjectDiagram from '@/components/diagrams/ProjectDiagram'
+import TopologyCanvas from '@/components/diagrams/TopologyCanvas/TopologyCanvas'
+import ArchitectureFlow from '@/components/molecules/ArchitectureFlow/ArchitectureFlow'
+import LaboratoryExplorer from '@/components/molecules/LaboratoryExplorer/LaboratoryExplorer'
 import styles from './HeroSection.module.scss'
 
 export default function HomePage() {
   const [copiedEmail, setCopiedEmail] = useState(false)
 
-  // 3 Strongest Verified Projects on the Homepage
-  const featuredProjects = getFeaturedProjects().slice(0, 3)
+  // 4 Flagship Engineering Projects
+  const featuredProjects = getFeaturedProjects().slice(0, 4)
 
   const copyEmail = () => {
     navigator.clipboard.writeText(SITE_CONFIG.email)
@@ -27,35 +30,67 @@ export default function HomePage() {
 
   return (
     <div className={styles.homeContainer}>
-      {/* ── 01: Hero Section ─────────────────────────────────────────────── */}
-      <section className={styles.hero} aria-label="Introduction">
+      {/* ── 01: Hero Section (Zajno-Inspired Cinematic Composition) ─────── */}
+      <section className={styles.hero} aria-label="Engineering Identity">
+        {/* Top Telemetry Header Ribbon */}
+        <div className={styles.telemetryBar}>
+          <div className={styles.telemetryInner}>
+            <span className={styles.telemetryItem}>
+              <span className={styles.statusDot} />
+              SYSTEM_STATUS: NOMINAL
+            </span>
+            <span className={styles.telemetryDivider}>{'//'}</span>
+            <span className={styles.telemetryItem}>
+              COORDINATES: 17.3850° N, 78.4867° E (HYDERABAD)
+            </span>
+            <span className={styles.telemetryDivider}>{'//'}</span>
+            <span className={styles.telemetryItem}>
+              ROLE: AI &amp; DATA PLATFORM ENGINEER
+            </span>
+            <span className={styles.telemetryDivider}>{'//'}</span>
+            <span className={styles.telemetryItem}>
+              AVAILABILITY: OPEN FOR 2027 ROLES
+            </span>
+          </div>
+        </div>
+
         <div className={styles.sectionInner}>
-          <div className={styles.heroInner}>
-            {/* Left: Oversized Typography & Readable Intro */}
-            <div className={styles.heroContent}>
-              <h1 className={styles.heroHeadline}>Build things that work.</h1>
+          <div className={styles.heroGrid}>
+            {/* Left: Oversized Kinetic Typography & Core Thesis */}
+            <div className={styles.heroMain}>
+              <div className={styles.nameOverline}>
+                <span>SAI VENKAT</span>
+                <span className={styles.subTag}>ENGINEERING PORTFOLIO</span>
+              </div>
+
+              <h1 className={styles.heroHeadline}>
+                <span className={styles.headlineLine}>BUILD THINGS</span>
+                <span className={styles.headlineLine}>THAT WORK.</span>
+              </h1>
 
               <p className={styles.heroPositioning}>
-                AI systems. Data engineering. Backend infrastructure.
+                AI systems. Fault-tolerant distributed platforms. Real-time streaming
+                infrastructure.
               </p>
 
               <p className={styles.heroBio}>
                 Computer science engineering student specializing in AI and Data
-                Engineering at Lovely Professional University (Class of 2027). I build
-                deterministic evaluation harnesses for language models, fault-tolerant
-                distributed systems, and real-time streaming pipelines.
+                Engineering at Lovely Professional University (Class of 2027, GPA: 7.46).
+                I build deterministic evaluation harnesses for language models, concurrent
+                distributed task queues in Go and Python, and low-latency event streaming
+                pipelines with Apache Kafka.
               </p>
 
-              {/* Only Two Primary Actions */}
               <div className={styles.heroCtas}>
                 <Button
                   as="a"
-                  href="#selected-projects"
+                  href="#selected-work"
                   variant="primary"
                   size="lg"
-                  iconRight={<ArrowRight size={18} />}
+                  iconRight={<ArrowRight size={16} />}
+                  data-cursor="EXPLORE"
                 >
-                  View Projects
+                  Explore Systems ↘
                 </Button>
                 <Button
                   as="a"
@@ -63,110 +98,153 @@ export default function HomePage() {
                   variant="secondary"
                   size="lg"
                   target="_blank"
-                  iconLeft={<Download size={16} />}
+                  iconLeft={<Download size={15} />}
+                  data-cursor="RESUME ↓"
                 >
-                  Download Resume
+                  Download Résumé
                 </Button>
               </div>
             </div>
 
-            {/* Right: Black-and-White Portrait */}
-            <div className={styles.portraitWrapper}>
-              <div className={styles.portraitFrame}>
-                <Image
-                  src="/images/sai-venkat-portrait.png"
-                  alt="Sai Venkat — AI/ML and Data Engineer monochrome portrait"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 440px"
-                  className={styles.portraitImg}
-                />
+            {/* Right: Integrated Portrait & Interactive 3D Topology */}
+            <div className={styles.visualStage}>
+              <div className={styles.visualCanvasFrame}>
+                <TopologyCanvas />
+                <div className={styles.canvasLegend}>
+                  <span className={styles.legendDot} />
+                  <span>INTERACTIVE NEURAL LATTICE // THREE.JS</span>
+                </div>
+              </div>
+
+              <div className={styles.portraitComposition}>
+                <div className={styles.portraitCard}>
+                  <div className={styles.portraitFrame}>
+                    <Image
+                      src="/images/sai-venkat-portrait.png"
+                      alt="Sai Venkat monochrome engineering portrait"
+                      fill
+                      priority
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 360px"
+                      className={styles.portraitImg}
+                    />
+                  </div>
+                  <div className={styles.portraitCaption}>
+                    <span className={styles.captionTitle}>SAI VENKAT</span>
+                    <span className={styles.captionRole}>CLASS OF 2027</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 02: Selected Projects (3 Strongest Projects) ────────────────── */}
+      {/* ── 02: Selected Work Showcase (Zajno Exhibition Layout) ───────── */}
       <section
-        id="selected-projects"
-        className={styles.projectsSection}
-        aria-labelledby="projects-heading"
+        id="selected-work"
+        className={styles.workSection}
+        aria-labelledby="work-heading"
       >
         <div className={styles.sectionInner}>
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionHeaderContent}>
-              <span className={styles.sectionOverline}>Selected Work</span>
-              <h2 id="projects-heading" className={styles.sectionTitle}>
-                Featured Systems
+          {/* Editorial Section Header */}
+          <div className={styles.workHeader}>
+            <div className={styles.workHeaderLeft}>
+              <span className={styles.workOverline}>Work ↘</span>
+              <h2 id="work-heading" className={styles.workTitle}>
+                Featured Engineering Systems
               </h2>
-              <p className={styles.sectionSubtext}>
-                Three flagship implementations engineered for evaluation rigor,
-                distributed concurrency, and streaming throughput.
-              </p>
             </div>
-            <Link href="/projects" className={styles.headerArchiveLink}>
-              View All 12 Projects
-              <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            <div className={styles.workHeaderRight}>
+              <p className={styles.workIntro}>
+                A curated sequence of verified platforms engineered for evaluation rigor,
+                distributed concurrency, topological workflow dispatch, and streaming
+                anomaly detection.
+              </p>
+              <Link
+                href="/projects"
+                className={styles.archiveHeaderLink}
+                data-cursor="ALL 12"
+              >
+                <span>View Complete Archive (12 Repositories)</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
 
-          <div className={styles.projectsList}>
-            {featuredProjects.map((project, i) => (
-              <article key={project.slug} className={styles.projectCard}>
-                <div className={styles.projectCardTop}>
-                  <div className={styles.projectCardIndexGroup}>
-                    <span className={styles.projectCardIndex}>0{i + 1}</span>
+          {/* Exhibition List */}
+          <div className={styles.workExhibitionList}>
+            {featuredProjects.map((project, idx) => (
+              <article key={project.slug} className={styles.exhibitionRow}>
+                {/* Row Meta Column */}
+                <div className={styles.exhibitionMetaCol}>
+                  <div className={styles.rowIndexWrap}>
+                    <span className={styles.rowIndex}>0{idx + 1} ↘</span>
                     <Badge variant="category">{categoryLabel(project.category)}</Badge>
                   </div>
-                  <span className={styles.projectCardYear}>{project.year}</span>
+                  <span className={styles.rowYear}>{project.year}</span>
                 </div>
 
-                <div className={styles.projectCardContent}>
-                  <div className={styles.projectCardInfo}>
-                    <h3 className={styles.projectCardTitle}>
+                {/* Content & Action Column */}
+                <div className={styles.exhibitionBodyCol}>
+                  <div className={styles.titleWrap}>
+                    <h3 className={styles.exhibitionTitle}>
                       <Link
                         href={`/projects/${project.slug}`}
-                        className={styles.projectCardTitleLink}
+                        className={styles.exhibitionTitleLink}
+                        data-cursor="CASE STUDY"
                       >
                         {project.title}
                       </Link>
                     </h3>
-                    <p className={styles.projectCardDesc}>{project.shortDescription}</p>
+                    <p className={styles.exhibitionDesc}>{project.shortDescription}</p>
+                  </div>
 
-                    <div className={styles.projectCardTags}>
-                      {project.techStack.slice(0, 4).map((tech) => (
+                  {/* Architecture Dataflow */}
+                  {project.pipelineSteps && project.pipelineSteps.length > 0 && (
+                    <div className={styles.architectureFlowBox}>
+                      <span className={styles.flowLabel}>SYSTEM DATAFLOW</span>
+                      <ArchitectureFlow steps={project.pipelineSteps} />
+                    </div>
+                  )}
+
+                  {/* Tags & Action Buttons */}
+                  <div className={styles.exhibitionBottomRow}>
+                    <div className={styles.exhibitionTags}>
+                      {project.techStack.map((tech) => (
                         <Badge key={tech} variant="tech">
                           {tech}
                         </Badge>
                       ))}
                     </div>
 
-                    <div className={styles.projectCardActions}>
+                    <div className={styles.exhibitionActions}>
                       <Link
                         href={`/projects/${project.slug}`}
-                        className={styles.projectCardBtn}
-                        aria-label={`Read case study for ${project.title}`}
+                        className={styles.caseStudyLink}
+                        data-cursor="CASE STUDY"
                       >
                         <span>Case Study</span>
-                        <ArrowRight size={14} aria-hidden="true" />
+                        <ArrowRight size={13} />
                       </Link>
                       {project.repoUrl && (
                         <a
                           href={project.repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={styles.projectCardSecondaryLink}
-                          aria-label={`View ${project.title} on GitHub`}
+                          className={styles.repoLink}
+                          data-cursor="GITHUB ↗"
                         >
                           <span>GitHub</span>
-                          <ArrowUpRight size={13} aria-hidden="true" />
+                          <ArrowUpRight size={13} />
                         </a>
                       )}
                     </div>
                   </div>
+                </div>
 
-                  <div className={styles.projectCardVisual}>
+                {/* Interactive Visual Preview Stage */}
+                <div className={styles.exhibitionVisualCol}>
+                  <div className={styles.visualCardStage}>
                     <ProjectDiagram
                       componentName={project.diagramComponent}
                       slug={project.slug}
@@ -178,214 +256,190 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className={styles.archiveCtaRow}>
-            <Link href="/projects" className={styles.archiveFullBtn}>
-              Browse All 12 Repositories in the Archive
-              <ArrowRight size={14} aria-hidden="true" />
+          {/* Full Archive Gateway Banner */}
+          <div className={styles.archiveBanner}>
+            <div className={styles.archiveBannerContent}>
+              <span className={styles.archiveBannerOverline}>REPOSITORY ARCHIVE</span>
+              <h3 className={styles.archiveBannerTitle}>
+                Explore the Complete 12-System Engineering Catalog
+              </h3>
+              <p className={styles.archiveBannerSub}>
+                Every public repository is verified against real source code,
+                dependencies, and architecture diagrams.
+              </p>
+            </div>
+            <Link
+              href="/projects"
+              className={styles.archiveBannerBtn}
+              data-cursor="ARCHIVE ↗"
+            >
+              <span>Access All 12 Projects</span>
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── 03: Technical Expertise (Merged Focus Areas & Principles) ───── */}
-      <section className={styles.expertiseSection} aria-labelledby="expertise-heading">
+      {/* ── 03: Interactive Systems Laboratory ─────────────────────────── */}
+      <section className={styles.labSection} aria-labelledby="lab-heading">
         <div className={styles.sectionInner}>
-          <div className={styles.sectionHeaderContent}>
-            <span className={styles.sectionOverline}>Capabilities</span>
-            <h2 id="expertise-heading" className={styles.sectionTitle}>
-              Technical Expertise
+          <div className={styles.labHeader}>
+            <span className={styles.labOverline}>Capabilities ↘</span>
+            <h2 id="lab-heading" className={styles.labTitle}>
+              Systems Laboratory
             </h2>
-            <p className={styles.sectionSubtext}>
-              Core disciplines where I build systems, run empirical benchmarks, and write
-              production code.
+            <p className={styles.labSubtext}>
+              Interactive architectural exploration across my primary engineering
+              disciplines. Inspect verified implementation patterns directly.
             </p>
           </div>
 
-          <div className={styles.expertiseGrid}>
-            <div className={styles.expertiseCol}>
-              <span className={styles.expertiseColIndex}>01</span>
-              <h3 className={styles.expertiseColTitle}>AI &amp; Evaluation Systems</h3>
-              <p className={styles.expertiseColDesc}>
-                Deterministic evaluation harnesses using the RAG Triad framework
-                (faithfulness, relevance, groundedness). Benchmarking hallucination
-                scoring, prompt variance, and retrieval regression testing in CI/CD.
-              </p>
-              <div className={styles.expertiseTags}>
-                <span className={styles.expertiseTag}>RAGAS</span>
-                <span className={styles.expertiseTag}>LangChain</span>
-                <span className={styles.expertiseTag}>HuggingFace</span>
-                <span className={styles.expertiseTag}>Vector Stores</span>
-              </div>
-            </div>
-
-            <div className={styles.expertiseCol}>
-              <span className={styles.expertiseColIndex}>02</span>
-              <h3 className={styles.expertiseColTitle}>
-                Distributed Backend &amp; Concurrency
-              </h3>
-              <p className={styles.expertiseColDesc}>
-                Fault-tolerant asynchronous job processing using Redis Streams and Celery.
-                Implementing finite-state machines, exponential backoff retries, and
-                dead-letter quarantine vaults with idempotent execution.
-              </p>
-              <div className={styles.expertiseTags}>
-                <span className={styles.expertiseTag}>FastAPI</span>
-                <span className={styles.expertiseTag}>Redis Streams</span>
-                <span className={styles.expertiseTag}>PostgreSQL</span>
-                <span className={styles.expertiseTag}>Docker</span>
-              </div>
-            </div>
-
-            <div className={styles.expertiseCol}>
-              <span className={styles.expertiseColIndex}>03</span>
-              <h3 className={styles.expertiseColTitle}>
-                Data Engineering &amp; Streaming
-              </h3>
-              <p className={styles.expertiseColDesc}>
-                Sliding-window feature engineering, low-latency real-time inference
-                pipelines, and dimensional data modeling with dbt and SQL for cohort and
-                behavioral decision intelligence.
-              </p>
-              <div className={styles.expertiseTags}>
-                <span className={styles.expertiseTag}>Scikit-learn</span>
-                <span className={styles.expertiseTag}>dbt core</span>
-                <span className={styles.expertiseTag}>SQL</span>
-                <span className={styles.expertiseTag}>Pandas</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.principlesBar}>
-            <span className={styles.principlesLabel}>Engineering Philosophy</span>
-            <p className={styles.principlesText}>
-              Systems over silos. Prioritizing reproducible evaluation harnesses,
-              deterministic benchmarking, and fault-tolerant distributed infrastructure
-              over unverified black-box claims.
-            </p>
-          </div>
+          <LaboratoryExplorer />
         </div>
       </section>
 
-      {/* ── 04: Experience & Education Timeline ─────────────────────────── */}
-      <section className={styles.timelineSection} aria-labelledby="timeline-heading">
+      {/* ── 04: Engineering Ledger (Experience & Academics) ────────────── */}
+      <section className={styles.ledgerSection} aria-labelledby="ledger-heading">
         <div className={styles.sectionInner}>
-          <div className={styles.sectionHeaderContent}>
-            <span className={styles.sectionOverline}>Background</span>
-            <h2 id="timeline-heading" className={styles.sectionTitle}>
-              Education &amp; Experience
+          <div className={styles.ledgerHeader}>
+            <span className={styles.ledgerOverline}>Background ↘</span>
+            <h2 id="ledger-heading" className={styles.ledgerTitle}>
+              Engineering Ledger
             </h2>
-            <p className={styles.sectionSubtext}>
-              Academic trajectory and technical systems engineering.
-            </p>
           </div>
 
-          <div className={styles.timelineGrid}>
-            <div className={styles.timelineCard}>
-              <span className={styles.timelineDate}>2023 — 2027 (Expected)</span>
-              <h3 className={styles.timelineTitle}>Lovely Professional University</h3>
-              <p className={styles.timelineSubtitle}>
-                B.Tech in Computer Science and Engineering (AI &amp; Data Engineering)
-              </p>
-              <p className={styles.timelineBody}>
-                Specialization in artificial intelligence algorithms, distributed systems,
-                and large-scale data engineering. Cumulative GPA: 7.46.
-              </p>
-              <div className={styles.timelineMetaPills}>
-                <span className={styles.timelinePill}>Phagwara, Punjab</span>
-                <span className={styles.timelinePill}>
-                  Data Structures &amp; Algorithms
-                </span>
-                <span className={styles.timelinePill}>Distributed Systems</span>
-                <span className={styles.timelinePill}>Machine Learning</span>
+          <div className={styles.ledgerTable}>
+            {/* Row 1: University */}
+            <div className={styles.ledgerRow}>
+              <div className={styles.ledgerTimeCol}>
+                <span className={styles.ledgerTime}>2023 — 2027</span>
+                <span className={styles.ledgerBadge}>EXPECTED GRADUATION</span>
+              </div>
+              <div className={styles.ledgerMainCol}>
+                <h3 className={styles.ledgerOrg}>Lovely Professional University</h3>
+                <p className={styles.ledgerDegree}>
+                  B.Tech in Computer Science and Engineering (AI &amp; Data Engineering)
+                </p>
+                <p className={styles.ledgerDetail}>
+                  Focus on distributed systems, machine learning algorithms, database
+                  internals, and large-scale data platforms. Cumulative GPA:{' '}
+                  <strong>7.46</strong>.
+                </p>
+                <div className={styles.ledgerPills}>
+                  <span>Phagwara, Punjab</span>
+                  <span>Data Structures &amp; Algorithms</span>
+                  <span>Distributed Systems</span>
+                  <span>Machine Learning</span>
+                </div>
               </div>
             </div>
 
-            <div className={styles.timelineCard}>
-              <span className={styles.timelineDate}>2024 — Present</span>
-              <h3 className={styles.timelineTitle}>
-                Systems Architecture &amp; Projects
-              </h3>
-              <p className={styles.timelineSubtitle}>
-                AI/ML Engineer · Applied AI / GenAI · Data Platform Engineer
-              </p>
-              <p className={styles.timelineBody}>
-                Independent design and implementation of distributed architectures,
-                deterministic LLM evaluation harnesses, and event streaming pipelines with
-                complete documentation and open-source repositories.
-              </p>
-              <div className={styles.timelineMetaPills}>
-                <span className={styles.timelinePill}>19 Repositories</span>
-                <span className={styles.timelinePill}>Open-Source Code</span>
-                <span className={styles.timelinePill}>Available for Roles</span>
+            {/* Row 2: Systems Architecture */}
+            <div className={styles.ledgerRow}>
+              <div className={styles.ledgerTimeCol}>
+                <span className={styles.ledgerTime}>2024 — PRESENT</span>
+                <span className={styles.ledgerBadge}>OPEN SOURCE WORK</span>
+              </div>
+              <div className={styles.ledgerMainCol}>
+                <h3 className={styles.ledgerOrg}>
+                  Systems Architecture &amp; Engineering
+                </h3>
+                <p className={styles.ledgerDegree}>
+                  AI/ML Engineer · Distributed Systems · Data Platform Engineer
+                </p>
+                <p className={styles.ledgerDetail}>
+                  Independent design, implementation, and benchmarking of 12 full-stack
+                  engineering systems: evaluation harnesses, Redis Streams task queues,
+                  topological workflow engines, and Kafka KRaft event pipelines.
+                </p>
+                <div className={styles.ledgerPills}>
+                  <span>19 GitHub Repositories</span>
+                  <span>Apache Kafka</span>
+                  <span>Redis Streams</span>
+                  <span>Python &amp; Go</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 05: Minimal Contact Section ─────────────────────────────────── */}
-      <section className={styles.contactSection} aria-labelledby="contact-heading">
+      {/* ── 05: Cinematic Contact Finale ──────────────────────────────── */}
+      <section className={styles.finaleSection} aria-labelledby="finale-heading">
         <div className={styles.sectionInner}>
-          <div className={styles.contactBox}>
-            <div className={styles.contactContent}>
-              <h2 id="contact-heading" className={styles.contactTitle}>
-                Let&apos;s build things that work.
+          <div className={styles.finaleCard}>
+            <div className={styles.finaleTop}>
+              <span className={styles.finaleOverline}>CONTACT // CO-ENGINEER ↘</span>
+              <h2 id="finale-heading" className={styles.finaleTitle}>
+                Let&apos;s engineer something extraordinary.
               </h2>
-              <p className={styles.contactSub}>
-                Available for AI/ML Engineer, Applied AI / GenAI, and Data Platform roles
-                (Class of 2027). Response turnaround is typically within 1 business day.
+              <p className={styles.finaleDesc}>
+                Actively interviewing for AI/ML Engineer, Applied AI, and Data Platform
+                roles (Class of 2027). Response turnaround is typically within 1 business
+                day.
               </p>
             </div>
 
-            <div className={styles.contactActionsGroup}>
-              <a href={`mailto:${SITE_CONFIG.email}`} className={styles.emailDirectBtn}>
-                <span>{SITE_CONFIG.email}</span>
-                <ArrowRight size={16} aria-hidden="true" />
-              </a>
+            <div className={styles.finaleActions}>
+              <div className={styles.emailRow}>
+                <a
+                  href={`mailto:${SITE_CONFIG.email}`}
+                  className={styles.emailPill}
+                  data-cursor="EMAIL ✉"
+                >
+                  <span>{SITE_CONFIG.email}</span>
+                  <ArrowRight size={18} />
+                </a>
 
-              <button
-                type="button"
-                className={styles.copyEmailSnippet}
-                onClick={copyEmail}
-                aria-label="Copy official email to clipboard"
-              >
-                {copiedEmail ? <Check size={14} /> : <Copy size={14} />}
-                <span>{copiedEmail ? 'Email Copied' : 'Click to copy address'}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={copyEmail}
+                  className={styles.copyPill}
+                  aria-label="Copy official email to clipboard"
+                  data-cursor="COPY"
+                >
+                  {copiedEmail ? <Check size={14} /> : <Copy size={14} />}
+                  <span>{copiedEmail ? 'Copied to Clipboard' : 'Copy Email'}</span>
+                </button>
+              </div>
 
-              <div className={styles.socialRow}>
+              <div className={styles.socialBar}>
                 <a
                   href={SITE_CONFIG.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.socialRowLink}
-                  aria-label="GitHub profile"
+                  className={styles.socialBtn}
+                  data-cursor="GITHUB ↗"
                 >
-                  <GithubIcon size={14} aria-hidden="true" />
+                  <GithubIcon size={15} />
                   <span>GitHub</span>
                 </a>
-                <span>·</span>
+                <span className={styles.socialDivider}>·</span>
                 <a
                   href={SITE_CONFIG.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.socialRowLink}
-                  aria-label="LinkedIn profile"
+                  className={styles.socialBtn}
+                  data-cursor="LINKEDIN ↗"
                 >
-                  <LinkedinIcon size={14} aria-hidden="true" />
+                  <LinkedinIcon size={15} />
                   <span>LinkedIn</span>
                 </a>
-                <span>·</span>
+                <span className={styles.socialDivider}>·</span>
                 <a
                   href={RESUME_PATH}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={styles.socialRowLink}
-                  aria-label="Download Résumé"
+                  className={styles.socialBtn}
+                  data-cursor="RESUME ↓"
                 >
-                  <Download size={14} aria-hidden="true" />
-                  <span>Resume</span>
+                  <Download size={15} />
+                  <span>Official Résumé</span>
                 </a>
+                <span className={styles.socialDivider}>·</span>
+                <Link href="/contact" className={styles.socialBtn} data-cursor="FORM">
+                  <span>Send Direct Message →</span>
+                </Link>
               </div>
             </div>
           </div>

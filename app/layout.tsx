@@ -5,6 +5,9 @@ import { SITE_CONFIG } from '@/lib/constants'
 import Navigation from '@/components/organisms/Navigation/Navigation'
 import Footer from '@/components/organisms/Footer/Footer'
 import PageTransition from '@/components/providers/PageTransition'
+import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider'
+import CustomCursor from '@/components/atoms/CustomCursor/CustomCursor'
+import StudioPreloader from '@/components/molecules/StudioPreloader/StudioPreloader'
 
 // ── Fonts ─────────────────────────────────────────────────────────────────────
 
@@ -69,8 +72,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0C0C0E',
-  colorScheme: 'dark',
+  themeColor: '#111111',
+  colorScheme: 'light dark',
 }
 
 // ── Root Layout ────────────────────────────────────────────────────────────────
@@ -82,20 +85,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        {/* Minimal Studio Preloader */}
+        <StudioPreloader />
+
+        {/* Dynamic Context Cursor */}
+        <CustomCursor />
+
         {/* Skip to main content — accessibility */}
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
 
-        <Navigation />
+        <SmoothScrollProvider>
+          <Navigation />
 
-        <PageTransition>
-          <main id="main-content" tabIndex={-1}>
-            {children}
-          </main>
-        </PageTransition>
+          <PageTransition>
+            <main id="main-content" tabIndex={-1}>
+              {children}
+            </main>
+          </PageTransition>
 
-        <Footer />
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   )
