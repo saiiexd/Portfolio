@@ -1,0 +1,145 @@
+@use '@/styles/tokens' as *;
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  background: var(--color-dark-base);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-4);
+  box-shadow:
+    0 24px 64px rgba(11, 15, 25, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  transition: all var(--transition-base);
+
+  &:hover {
+    border-color: rgba(0, 82, 255, 0.4);
+    box-shadow: 0 28px 72px rgba(0, 82, 255, 0.15);
+  }
+}
+
+.ambientGlowPrimary {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(0, 82, 255, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.ambientGlowSecondary {
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(56, 225, 210, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.telemetryTag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px 12px;
+  background: rgba(17, 23, 38, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #e2e8f0;
+  backdrop-filter: blur(8px);
+  z-index: 5;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.tagTop {
+  top: 14px;
+  left: 20px;
+}
+
+.tagBottomRight {
+  bottom: 14px;
+  right: 20px;
+}
+
+.pulseGreen {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38e1d2;
+  box-shadow: 0 0 8px #38e1d2;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+.pulseGold {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0052ff;
+  box-shadow: 0 0 8px #0052ff;
+  animation: pulseDot 2s infinite ease-in-out;
+  animation-delay: 1s;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dashLine {
+  animation: dashShift 18s linear infinite;
+}
+
+@keyframes dashShift {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+.nodeGroup {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+
+  &:hover,
+  &.selectedNode {
+    circle:nth-child(2) {
+      stroke: #0052ff;
+      stroke-width: 2.5px;
+    }
+  }
+}
+
+.sonarRing {
+  animation: sonarWave 2.8s infinite ease-out;
+}
+
+@keyframes sonarWave {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}

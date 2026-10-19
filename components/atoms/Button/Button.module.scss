@@ -1,0 +1,96 @@
+@use '@/styles/tokens' as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// ── Variants ──────────────────────────────────────────────────────────────────
+
+.primary {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 16px rgba(0, 82, 255, 0.22);
+
+  &:hover {
+    background: #0043d8;
+    border-color: #0043d8;
+    color: var(--color-text-inverse);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 82, 255, 0.32);
+  }
+}
+
+.secondary {
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  box-shadow: 0 2px 8px rgba(11, 15, 25, 0.04);
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-bg-subtle);
+    transform: translateY(-1px);
+  }
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+
+  &:hover {
+    background: var(--color-accent-subtle);
+    color: var(--color-text-primary);
+  }
+}
+
+// ── Sizes ─────────────────────────────────────────────────────────────────────
+
+.sm {
+  font-size: var(--text-sm);
+  padding: var(--space-2) var(--space-4);
+}
+
+.md {
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-6);
+}
+
+.lg {
+  font-size: var(--text-md);
+  padding: var(--space-4) var(--space-8);
+}
+
+// ── Icon ──────────────────────────────────────────────────────────────────────
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}

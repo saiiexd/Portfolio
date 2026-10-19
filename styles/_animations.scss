@@ -1,0 +1,73 @@
+// =============================================================================
+// ANIMATIONS — Shared keyframes and reduced-motion overrides
+// GSAP handles scroll animations. These are for CSS-only transitions.
+// =============================================================================
+@use '@/styles/tokens' as *;
+
+// Fade in up (used as fallback for components without GSAP context)
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Fade in
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Draw line (SVG stroke)
+@keyframes drawLine {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+// Pulse (subtle glow for signal elements)
+@keyframes pulse-signal {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// Blink cursor (hero)
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+// Reduced motion overrides
+// All GSAP animations also check gsap.matchMedia for reduced-motion.
+// These CSS overrides handle any CSS animation that might still fire.
+@include reduced-motion {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

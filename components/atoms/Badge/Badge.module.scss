@@ -1,0 +1,42 @@
+@use '@/styles/tokens' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+// Technology tag — clean editorial technical pill
+.tech {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+
+  &:hover {
+    color: var(--color-accent);
+    border-color: rgba(0, 82, 255, 0.3);
+  }
+}
+
+// Category label — vibrant cobalt pill
+.category {
+  background: rgba(0, 82, 255, 0.08);
+  color: var(--color-accent);
+  border: 1px solid rgba(0, 82, 255, 0.2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+// Status indicator
+.status {
+  background: var(--color-bg-surface);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-border);
+}

@@ -1,0 +1,212 @@
+@use '@/styles/tokens' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+// ── Field ─────────────────────────────────────────────────────────────────────
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+  letter-spacing: 0.01em;
+
+  span {
+    color: var(--color-graphite);
+  }
+}
+
+.input,
+.textarea {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  width: 100%;
+  appearance: none;
+
+  &::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
+  &:hover {
+    border-color: var(--color-graphite);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.1);
+  }
+}
+
+.inputError {
+  border-color: var(--color-ink) !important;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+// ── Error message ─────────────────────────────────────────────────────────────
+
+.errorMsg {
+  font-size: var(--text-xs);
+  color: var(--color-graphite);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+}
+
+// ── Submit ────────────────────────────────────────────────────────────────────
+
+.submitRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px 28px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    background: var(--color-graphite);
+    border-color: var(--color-graphite);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+// Loading spinner
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  @include reduced-motion {
+    animation: none;
+    border: 2px solid #ffffff;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ── Status messages ───────────────────────────────────────────────────────────
+
+.directMailBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 10px 18px;
+  background: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--color-paper);
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+}
+
+.successMsg {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-xs);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.errorState {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-graphite);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+
+  a {
+    color: var(--color-ink);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}
+
+.fallbackLink {
+  color: var(--color-ink) !important;
+  text-decoration: none !important;
+  padding: 4px 10px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background: var(--color-ink);
+    color: var(--color-paper) !important;
+    border-color: var(--color-ink);
+  }
+}

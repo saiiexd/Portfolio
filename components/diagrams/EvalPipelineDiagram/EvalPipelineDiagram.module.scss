@@ -1,0 +1,377 @@
+@use '@/styles/tokens' as *;
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  background: var(--color-dark-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.previewMode {
+  border-color: var(--color-border);
+  background: var(--color-dark-base);
+
+  .telemetryBar {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .pipelineCanvas {
+    padding: var(--space-4) var(--space-3);
+  }
+}
+
+.telemetryBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.systemName {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.versionTag {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.telemetryStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.statLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  color: #888888;
+  letter-spacing: 0.06em;
+}
+
+.statVal {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: #ffffff;
+  font-weight: 600;
+
+  &.highlight {
+    color: #ffffff;
+  }
+}
+
+// ── Pipeline Canvas (SVG Background + Responsive Nodes) ─────────────────────────
+
+.pipelineCanvas {
+  position: relative;
+  width: 100%;
+  padding: var(--space-8) var(--space-4);
+  background-size: 24px 24px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.svgCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+// ── Interactive HTML Node Cards ────────────────────────────────────────────────
+
+.nodesContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+
+  @include responsive(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include responsive(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.nodeCard {
+  background: #181818;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  &:hover {
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.08);
+  }
+
+  &.activeNode {
+    border-color: #ffffff;
+    background: #202020;
+    box-shadow: 0 0 0 1px #ffffff;
+  }
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nodeStep {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: #bdbdbd;
+  letter-spacing: 0.08em;
+}
+
+.nodeStatus {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nodeTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.nodeDesc {
+  font-size: var(--text-xs);
+  color: #a0a0a0;
+  line-height: 1.5;
+}
+
+.nodeTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: auto;
+}
+
+.nodeTag {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  color: #e0e0e0;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+// ── Metrics & Benchmarks Tray ─────────────────────────────────────────────────
+
+.evalMetricsTray {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: #141414;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  @include responsive(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.metricBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.metricTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: #888888;
+  letter-spacing: 0.06em;
+}
+
+.metricScore {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.metricBarTrack {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: var(--space-1);
+}
+
+.metricBarFill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metricDesc {
+  font-size: 11px;
+  color: #999999;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+// ── Experiment Comparison Strip ────────────────────────────────────────────────
+
+.experimentComparison {
+  padding: var(--space-4) var(--space-6);
+  background: #111111;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.compHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.compLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.compTabs {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.compTab {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #999999;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &.activeTab {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #111111;
+    font-weight: 700;
+  }
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  th {
+    color: #777777;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    color: #e0e0e0;
+  }
+
+  .passMetric {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .failMetric {
+    color: #888888;
+  }
+
+  .runName {
+    color: #ffffff;
+    font-weight: 600;
+  }
+}

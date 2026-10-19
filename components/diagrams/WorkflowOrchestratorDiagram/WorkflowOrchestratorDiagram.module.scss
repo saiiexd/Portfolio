@@ -1,0 +1,202 @@
+@use '@/styles/tokens' as *;
+
+.canvas {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(11, 15, 25, 0.16);
+  position: relative;
+}
+
+.previewMode {
+  .headerBar {
+    padding: 10px 14px;
+  }
+  .diagramContainer {
+    padding: var(--space-2);
+  }
+}
+
+.headerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.statusPulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  animation: pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.titleText {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #f8fafc;
+}
+
+.headerRight {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.badge {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: #38e1d2;
+  background: rgba(56, 225, 210, 0.08);
+  border: 1px solid rgba(56, 225, 210, 0.2);
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+}
+
+.diagramContainer {
+  padding: var(--space-6) var(--space-4);
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.nodeGroup {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+
+  &:hover {
+    .nodeBox {
+      stroke: #0052ff;
+      fill: #1a233a;
+    }
+  }
+
+  &.active {
+    .nodeBox {
+      stroke: #38e1d2;
+      stroke-width: 2px;
+      fill: #162438;
+      filter: drop-shadow(0 0 12px rgba(56, 225, 210, 0.2));
+    }
+    .nodeTitle {
+      fill: #ffffff;
+    }
+  }
+}
+
+.nodeBox {
+  fill: #111726;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1.5px;
+  transition: all var(--transition-fast);
+}
+
+.nodeTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  fill: #e2e8f0;
+}
+
+.nodeSub {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  fill: #94a3b8;
+}
+
+.telemetryFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.telemetryInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.infoCol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.infoLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.infoValue {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: #38e1d2;
+  font-weight: 600;
+}
+
+.simButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 14px;
+  background: #0052ff;
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+
+  &:hover:not(:disabled) {
+    background: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

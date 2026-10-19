@@ -1,0 +1,301 @@
+@use '@/styles/tokens' as *;
+
+.page {
+  padding-top: calc(72px + var(--space-12));
+  min-height: 100vh;
+  background-color: var(--color-bg-base);
+}
+
+.container {
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+  padding-bottom: var(--space-32);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.header {
+  max-width: 720px;
+  margin-bottom: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-8);
+}
+
+.overline {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-graphite);
+  font-weight: 700;
+}
+
+.heading {
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(var(--text-2xl), 5vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--color-ink);
+  line-height: 1.05;
+}
+
+.lead {
+  font-size: var(--text-md);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-10);
+
+  @include responsive(lg) {
+    grid-template-columns: 360px 1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+}
+
+.sidebarHeading {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-4);
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.availabilityBox {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.livePulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.availText {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.availDesc {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.locationPills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.locPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-text-tertiary);
+}
+
+.directLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.emailCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+  }
+}
+
+.emailLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+
+  &:hover {
+    .directLinkValue {
+      color: var(--color-ink);
+      text-decoration: underline;
+    }
+  }
+}
+
+.emailMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  padding: 6px 10px;
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  color: var(--color-ink);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+}
+
+.directLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-bg-card);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+  }
+}
+
+.directLinkIcon {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  transition: all var(--transition-fast);
+}
+
+.directLinkContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.directLinkLabel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.directLinkValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.note {
+  padding: var(--space-4);
+  border-left: 2px solid var(--color-ink);
+  font-size: var(--text-xs);
+  color: var(--color-text-tertiary);
+  line-height: 1.6;
+  background: var(--color-bg-subtle);
+}
+
+// ── Form Section ──────────────────────────────────────────────────────────────
+
+.formSection {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+  @include responsive(md) {
+    padding: var(--space-12);
+  }
+}
+
+.formHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: var(--space-4);
+}
+
+.secureBadge {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-graphite);
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
