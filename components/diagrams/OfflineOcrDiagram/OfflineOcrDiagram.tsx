@@ -24,16 +24,16 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
           <span className={styles.statItem}>
             <span className={styles.statLabel}>SECURITY POSTURE</span>
             <span className={`${styles.statVal} ${styles.highlight}`}>
-              100% Air-Gapped (Zero Telemetry)
+              Air-Gapped Local (Zero Cloud Calls)
             </span>
           </span>
           <span className={styles.statItem}>
             <span className={styles.statLabel}>PREPROCESSING</span>
-            <span className={styles.statVal}>Otsu Adaptive Binarization</span>
+            <span className={styles.statVal}>OpenCV Gaussian Adaptive</span>
           </span>
           <span className={styles.statItem}>
             <span className={styles.statLabel}>OCR ENGINE</span>
-            <span className={styles.statVal}>Tesseract 5 Local</span>
+            <span className={styles.statVal}>Tesseract 5 Local Executable</span>
           </span>
         </div>
       </div>
@@ -48,9 +48,7 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
               <Eye size={14} className={styles.nodeIcon} />
             </div>
             <div className={styles.nodeTitle}>Document Scan</div>
-            <p className={styles.nodeDesc}>
-              Raw scanned invoice / confidential PDF upload
-            </p>
+            <p className={styles.nodeDesc}>Local image file upload (PNG, JPG, TIFF)</p>
             <div className={styles.nodeMeta}>Zero Cloud Egress</div>
           </div>
 
@@ -64,9 +62,9 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
             </div>
             <div className={styles.nodeTitle}>OpenCV Clean</div>
             <p className={styles.nodeDesc}>
-              Grayscale, Gaussian blur, Otsu adaptive threshold
+              Grayscale, Gaussian blur (5x5), adaptive thresholding
             </p>
-            <div className={styles.nodeMeta}>Morphological Denoising</div>
+            <div className={styles.nodeMeta}>Gaussian C Binarization</div>
           </div>
 
           <div className={styles.connectorLine} />
@@ -79,7 +77,7 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
             </div>
             <div className={styles.nodeTitle}>Local Tesseract</div>
             <p className={styles.nodeDesc}>
-              LSTM character recognition & bounding box extraction
+              Local tesseract.exe execution via pytesseract wrapper
             </p>
             <div className={styles.nodeMeta}>Local CPU Execution</div>
           </div>
@@ -92,11 +90,11 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
               <span className={styles.nodeNum}>04</span>
               <Code2 size={14} className={styles.nodeIcon} />
             </div>
-            <div className={styles.nodeTitle}>Structured JSON</div>
+            <div className={styles.nodeTitle}>Text &amp; JSON</div>
             <p className={styles.nodeDesc}>
-              Key-value field parsing with character confidence
+              Plaintext extraction and structured JSON formatting
             </p>
-            <div className={styles.nodeMeta}>Exportable Schema</div>
+            <div className={styles.nodeMeta}>Streamlit / File Export</div>
           </div>
         </div>
       </div>
@@ -121,7 +119,7 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
                 className={`${styles.modeBtn} ${filterMode === 'processed' ? styles.activeTab : ''}`}
                 onClick={() => setFilterMode('processed')}
               >
-                Pass 2: OpenCV Binarized & Filtered ★
+                Pass 2: OpenCV Binarized &amp; Filtered ★
               </button>
             </div>
           </div>
@@ -131,21 +129,25 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
               <div className={styles.metricItem}>
                 <span className={styles.metricKey}>BACKGROUND NOISE</span>
                 <span className={styles.metricVal}>
-                  {filterMode === 'raw' ? 'High Artifacts (38.4%)' : 'Suppressed (<1.2%)'}
+                  {filterMode === 'raw'
+                    ? 'Unfiltered Scan Artifacts'
+                    : 'Suppressed by Gaussian Blur'}
                 </span>
               </div>
               <div className={styles.metricItem}>
-                <span className={styles.metricKey}>CHARACTER CONTRAST</span>
+                <span className={styles.metricKey}>BINARIZATION METHOD</span>
                 <span className={styles.metricVal}>
                   {filterMode === 'raw'
-                    ? 'Low Contrast (0.42)'
-                    : 'High Binary Edge (0.98)'}
+                    ? 'None (Multi-channel RGB)'
+                    : 'cv2.adaptiveThreshold (Gaussian C)'}
                 </span>
               </div>
               <div className={styles.metricItem}>
-                <span className={styles.metricKey}>OCR WORD ACCURACY</span>
+                <span className={styles.metricKey}>EXTRACTION READINESS</span>
                 <span className={styles.metricVal}>
-                  {filterMode === 'raw' ? '74.2% (Errors on noise)' : '98.6% Confirmed'}
+                  {filterMode === 'raw'
+                    ? 'Variable (Noise dependent)'
+                    : 'Clean High-Contrast Characters'}
                 </span>
               </div>
             </div>
@@ -159,7 +161,7 @@ export default function OfflineOcrDiagram({ mode = 'full' }: Props) {
                 {`{
   "document_type": "Purchase_Order",
   "air_gap_verified": true,
-  "confidence_mean": ${filterMode === 'raw' ? '0.742' : '0.986'},
+  "preprocessing": "${filterMode === 'raw' ? 'none' : 'cv2_gaussian_adaptive'}",
   "extracted_fields": {
     "po_number": "PO-2024-8842",
     "vendor": "Acme Industrial Supplies",

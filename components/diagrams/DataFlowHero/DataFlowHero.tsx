@@ -35,25 +35,25 @@ export default function DataFlowHero() {
       id: 'eval',
       x: 380,
       y: 140,
-      label: 'RELIABILITY HARNESS\nMulti-Stage Referee',
-      tag: 'RAGAS / Guardrail',
-      color: 'var(--color-signal)',
+      label: 'RELIABILITY HARNESS\nMulti-Stage Evaluator',
+      tag: 'Pluggable Criteria',
+      color: 'var(--color-ink)',
     },
     {
       id: 'metrics',
       x: 530,
       y: 80,
       label: 'OBSERVABILITY\nAttribution Signals',
-      tag: 'Latency: 14ms',
-      color: 'var(--color-accent-light)',
+      tag: 'Structured Telemetry',
+      color: 'var(--color-graphite)',
     },
     {
       id: 'feedback',
       x: 530,
       y: 200,
       label: 'ACTIVE LEARNING\nFeedback Pipeline',
-      tag: 'Curated DPO',
-      color: 'var(--color-signal-light)',
+      tag: 'Diagnostic Logs',
+      color: 'var(--color-silver)',
     },
   ]
 
@@ -70,12 +70,12 @@ export default function DataFlowHero() {
       {/* ── Floating Telemetry Badges ── */}
       <div className={`${styles.telemetryTag} ${styles.tagTop}`}>
         <span className={styles.pulseGreen} />
-        <span>STREAM INGESTION: 12.4K EVENTS/S</span>
+        <span>DATA PIPELINE: MULTI-STAGE TRACE</span>
       </div>
 
       <div className={`${styles.telemetryTag} ${styles.tagBottomRight}`}>
         <span className={styles.pulseGold} />
-        <span>EVAL FIDELITY: 94.6% GROUNDED</span>
+        <span>EVALUATION SUITE: DETERMINISTIC RUNNER</span>
       </div>
 
       <svg
@@ -86,16 +86,16 @@ export default function DataFlowHero() {
       >
         <defs>
           <linearGradient id="heroEdgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(200, 169, 110, 0.2)" />
-            <stop offset="50%" stopColor="#c8a96e" />
-            <stop offset="100%" stopColor="#38e1d2" />
+            <stop offset="0%" stopColor="rgba(255, 255, 255, 0.1)" />
+            <stop offset="50%" stopColor="rgba(255, 255, 255, 0.4)" />
+            <stop offset="100%" stopColor="#ffffff" />
           </linearGradient>
           <linearGradient id="heroSignalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#38e1d2" />
-            <stop offset="100%" stopColor="#74ede3" />
+            <stop offset="0%" stopColor="#888888" />
+            <stop offset="100%" stopColor="#ffffff" />
           </linearGradient>
           <filter id="heroNodeGlow" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="3" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
@@ -138,28 +138,28 @@ export default function DataFlowHero() {
         {/* Closed-loop feedback cycle */}
         <path
           d="M 530 200 C 480 260, 260 260, 210 210"
-          stroke="rgba(200, 169, 110, 0.35)"
+          stroke="rgba(255, 255, 255, 0.2)"
           strokeWidth="1.25"
           strokeDasharray="4 4"
           className={styles.dashLine}
         />
 
         {/* ── Animated Particle Packets ── */}
-        <circle r="3" fill="#c8a96e" filter="url(#heroNodeGlow)">
+        <circle r="3" fill="#ffffff" filter="url(#heroNodeGlow)">
           <animateMotion
             dur="2.8s"
             repeatCount="indefinite"
             path="M 60 140 C 130 140, 140 70, 210 70 C 290 70, 300 140, 380 140"
           />
         </circle>
-        <circle r="3" fill="#38e1d2" filter="url(#heroNodeGlow)">
+        <circle r="3" fill="#bdbdbd" filter="url(#heroNodeGlow)">
           <animateMotion
             dur="3.2s"
             repeatCount="indefinite"
             path="M 60 140 C 130 140, 140 210, 210 210 C 290 210, 300 140, 380 140 C 450 140, 460 80, 530 80"
           />
         </circle>
-        <circle r="2.5" fill="#e2cf9f" filter="url(#heroNodeGlow)">
+        <circle r="2.5" fill="#888888" filter="url(#heroNodeGlow)">
           <animateMotion
             dur="4.2s"
             repeatCount="indefinite"

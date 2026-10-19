@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import {
-  Users,
-  Bot,
-  MessageSquare,
-  Scale,
   TrendingUp,
-  TrendingDown,
-  RefreshCw,
+  Newspaper,
+  ShieldAlert,
+  SlidersHorizontal,
+  FileText,
+  Activity,
 } from 'lucide-react'
 import styles from './VerdictAiDiagram.module.scss'
 
@@ -16,189 +15,274 @@ interface Props {
   mode?: 'full' | 'preview'
 }
 
+type AgentKey = 'financial' | 'news' | 'critic' | 'refiner' | 'writer'
+
+interface AgentMeta {
+  name: string
+  file: string
+  role: string
+  tools: string[]
+  input: string
+  output: string
+  description: string
+}
+
+const AGENTS: Record<AgentKey, AgentMeta> = {
+  financial: {
+    name: 'Financial Analysis Agent',
+    file: 'backend/app/agents/financial_agent.py',
+    role: 'Extracts historical fundamentals, revenue trajectory, valuation multiples, and cash flow statement health.',
+    tools: ['yfinance API', 'get_financial_metrics', 'balance_sheet_parser'],
+    input: 'Ticker Symbol (e.g. AAPL, MSFT)',
+    output: 'Structured financial scorecard with margins & debt profile',
+    description:
+      'Queries balance sheet, income statement, and valuation metrics via yfinance to formulate fundamental ratio inputs.',
+  },
+  news: {
+    name: 'News & Sentiment Agent',
+    file: 'backend/app/agents/news_agent.py',
+    role: 'Scrapes recent market news, press releases, and macroeconomic context with sentiment extraction.',
+    tools: ['Tavily Search API', 'Google News Scraper', 'article_summarizer'],
+    input: 'Company Name & Industry Keywords',
+    output: 'Top 10 curated articles with timestamped sentiment scores',
+    description:
+      'Scrapes top news sources and regulatory filings, extracting bullish/bearish market narratives with citations.',
+  },
+  critic: {
+    name: 'Critic Agent (Adversarial)',
+    file: 'backend/app/agents/critic_agent.py',
+    role: 'Stress-tests findings from financial and news agents; identifies blind spots and downward valuation risks.',
+    tools: ['LLM Prompt Critique Harness', 'risk_factor_evaluator'],
+    input: 'Financial scorecard + News summary',
+    output: 'Adversarial counter-arguments and downside risk catalogue',
+    description:
+      'Applies adversarial reasoning to challenge optimistic management guidance, highlighting debt covenants and sector headwinds.',
+  },
+  refiner: {
+    name: 'Refiner Agent (Synthesizer)',
+    file: 'backend/app/agents/refiner_agent.py',
+    role: 'Reconciles bullish metrics against critic objections to reach a calibrated, evidence-backed verdict.',
+    tools: ['LangGraph state reducer', 'consensus_calibrator'],
+    input: 'Raw fundamental data + Critic objections',
+    output: 'Balanced analytical consensus matrix',
+    description:
+      'Balances quantitative multiples against qualitative risks, resolving conflicting evidence into a structured investment thesis.',
+  },
+  writer: {
+    name: 'Dossier Writer Agent',
+    file: 'backend/app/agents/writer_agent.py',
+    role: 'Compiles final comprehensive equity research report in markdown format with citations.',
+    tools: ['Report Compiler', 'Markdown Generator'],
+    input: 'Refined consensus matrix + Source citations',
+    output: 'Final Equity Research Dossier (.md / PDF)',
+    description:
+      'Formats the verified synthesis into an institutional-grade investment research memo with complete source links.',
+  },
+}
+
 export default function VerdictAiDiagram({ mode = 'full' }: Props) {
-  const [activePersona, setActivePersona] = useState<'bull' | 'bear' | 'risk'>('bull')
+  const [activeAgent, setActiveAgent] = useState<AgentKey>('financial')
+  const agent = AGENTS[activeAgent]
 
   return (
     <div className={`${styles.canvas} ${mode === 'preview' ? styles.previewMode : ''}`}>
+      {/* ── System Header Bar ── */}
       <div className={styles.headerBar}>
         <div className={styles.headerLeft}>
           <span className={styles.statusPulse} />
-          <span className={styles.titleText}>MULTI-AGENT ADVERSARIAL CONSENSUS</span>
+          <span className={styles.titleText}>
+            VERDICT AI · 5-AGENT LANGGRAPH ORCHESTRATION
+          </span>
         </div>
         <div className={styles.headerRight}>
-          <span className={styles.badge}>AUTONOMOUS DEBATE</span>
-          <span className={styles.badge}>EVIDENCE-BACKED DOSSIER</span>
+          <span className={styles.badge}>LangGraph Workflow</span>
+          <span className={styles.badge}>yfinance + Tavily</span>
+          <span className={styles.badge}>FastAPI Sink</span>
         </div>
       </div>
 
+      {/* ── Architecture SVG Flow ── */}
       <div className={styles.diagramContainer}>
         <svg
-          viewBox="0 0 760 250"
+          viewBox="0 0 760 270"
           className={styles.svg}
           xmlns="http://www.w3.org/2000/svg"
-          aria-label="Multi-Agent Consensus Architecture"
+          aria-label="Verdict AI 5-Agent LangGraph Architecture"
         >
           <defs>
-            <linearGradient id="agentConnBull" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="flowGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#454545" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#111111" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#ffffff" stopOpacity="0.8" />
             </linearGradient>
-            <linearGradient id="agentConnBear" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#777777" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#111111" stopOpacity="0.9" />
-            </linearGradient>
-            <linearGradient id="agentConnRisk" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#bdbdbd" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#111111" stopOpacity="0.9" />
-            </linearGradient>
+            <filter id="nodeGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
           </defs>
 
-          {/* Connectors to Central Arbiter */}
+          {/* Connectors from Ingestion to Evaluators */}
           <path
-            d="M 180 55 C 260 55, 300 125, 380 125"
+            d="M 170 60 C 220 60, 240 135, 290 135"
             fill="none"
-            stroke="url(#agentConnBull)"
-            strokeWidth="2.5"
+            stroke="url(#flowGrad1)"
+            strokeWidth="2"
+            strokeDasharray="3 3"
           />
           <path
-            d="M 180 125 L 380 125"
+            d="M 170 210 C 220 210, 240 135, 290 135"
             fill="none"
-            stroke="url(#agentConnRisk)"
-            strokeWidth="2.5"
+            stroke="url(#flowGrad1)"
+            strokeWidth="2"
+            strokeDasharray="3 3"
           />
-          <path
-            d="M 180 195 C 260 195, 300 125, 380 125"
-            fill="none"
-            stroke="url(#agentConnBear)"
-            strokeWidth="2.5"
-          />
+          <path d="M 430 135 L 470 135" fill="none" stroke="#ffffff" strokeWidth="2" />
+          <path d="M 610 135 L 640 135" fill="none" stroke="#ffffff" strokeWidth="2" />
 
-          {/* Connection to Output Dossier */}
-          <path
-            d="M 540 125 L 620 125"
-            fill="none"
-            stroke="#0052FF"
-            strokeWidth="2.5"
-            strokeDasharray="4 4"
-          />
-
-          {/* Agent 1: Bull */}
+          {/* Node 1: Financial Agent */}
           <g
-            className={`${styles.agentNode} ${activePersona === 'bull' ? styles.activeBull : ''}`}
-            onClick={() => setActivePersona('bull')}
+            className={`${styles.agentNode} ${activeAgent === 'financial' ? styles.active : ''}`}
+            onClick={() => setActiveAgent('financial')}
           >
             <rect
               x="20"
               y="25"
-              width="160"
-              height="60"
-              rx="10"
+              width="150"
+              height="70"
+              rx="6"
               className={styles.nodeBox}
             />
-            <text x="100" y="50" textAnchor="middle" className={styles.agentTitle}>
-              Bull Analyst Agent
+            <text x="95" y="52" textAnchor="middle" className={styles.nodeTitle}>
+              financial_agent
             </text>
-            <text x="100" y="70" textAnchor="middle" className={styles.agentSub}>
-              Upside Thesis · TAM
+            <text x="95" y="72" textAnchor="middle" className={styles.nodeSub}>
+              yfinance Fundamentals
             </text>
           </g>
 
-          {/* Agent 2: Risk Arbitrageur */}
+          {/* Node 2: News Agent */}
           <g
-            className={`${styles.agentNode} ${activePersona === 'risk' ? styles.activeRisk : ''}`}
-            onClick={() => setActivePersona('risk')}
+            className={`${styles.agentNode} ${activeAgent === 'news' ? styles.active : ''}`}
+            onClick={() => setActiveAgent('news')}
           >
             <rect
               x="20"
+              y="175"
+              width="150"
+              height="70"
+              rx="6"
+              className={styles.nodeBox}
+            />
+            <text x="95" y="202" textAnchor="middle" className={styles.nodeTitle}>
+              news_agent
+            </text>
+            <text x="95" y="222" textAnchor="middle" className={styles.nodeSub}>
+              Tavily Sentiment Search
+            </text>
+          </g>
+
+          {/* Node 3: Critic Agent */}
+          <g
+            className={`${styles.agentNode} ${activeAgent === 'critic' ? styles.active : ''}`}
+            onClick={() => setActiveAgent('critic')}
+          >
+            <rect
+              x="290"
+              y="100"
+              width="140"
+              height="70"
+              rx="6"
+              className={styles.nodeBox}
+            />
+            <text x="360" y="127" textAnchor="middle" className={styles.nodeTitle}>
+              critic_agent
+            </text>
+            <text x="360" y="147" textAnchor="middle" className={styles.nodeSub}>
+              Adversarial Stress Test
+            </text>
+          </g>
+
+          {/* Node 4: Refiner Agent */}
+          <g
+            className={`${styles.agentNode} ${activeAgent === 'refiner' ? styles.active : ''}`}
+            onClick={() => setActiveAgent('refiner')}
+          >
+            <rect
+              x="470"
+              y="100"
+              width="140"
+              height="70"
+              rx="6"
+              className={styles.nodeBox}
+            />
+            <text x="540" y="127" textAnchor="middle" className={styles.nodeTitle}>
+              refiner_agent
+            </text>
+            <text x="540" y="147" textAnchor="middle" className={styles.nodeSub}>
+              Consensus Calibrator
+            </text>
+          </g>
+
+          {/* Node 5: Writer Agent */}
+          <g
+            className={`${styles.agentNode} ${activeAgent === 'writer' ? styles.active : ''}`}
+            onClick={() => setActiveAgent('writer')}
+          >
+            <rect
+              x="640"
               y="95"
-              width="160"
-              height="60"
-              rx="10"
-              className={styles.nodeBox}
-            />
-            <text x="100" y="120" textAnchor="middle" className={styles.agentTitle}>
-              Risk Arbiter Agent
-            </text>
-            <text x="100" y="140" textAnchor="middle" className={styles.agentSub}>
-              VaR · Factor Exposure
-            </text>
-          </g>
-
-          {/* Agent 3: Bear Critic */}
-          <g
-            className={`${styles.agentNode} ${activePersona === 'bear' ? styles.activeBear : ''}`}
-            onClick={() => setActivePersona('bear')}
-          >
-            <rect
-              x="20"
-              y="165"
-              width="160"
-              height="60"
-              rx="10"
-              className={styles.nodeBox}
-            />
-            <text x="100" y="190" textAnchor="middle" className={styles.agentTitle}>
-              Bear Critic Agent
-            </text>
-            <text x="100" y="210" textAnchor="middle" className={styles.agentSub}>
-              Downside &amp; Audit Risk
-            </text>
-          </g>
-
-          {/* Central Consensus Core */}
-          <g className={styles.centerNode}>
-            <rect
-              x="380"
-              y="75"
-              width="160"
-              height="100"
-              rx="14"
-              className={styles.centerBox}
-            />
-            <text x="460" y="115" textAnchor="middle" className={styles.centerTitle}>
-              Synthesis Engine
-            </text>
-            <text x="460" y="135" textAnchor="middle" className={styles.centerSub}>
-              Adversarial Rounds (3x)
-            </text>
-            <text x="460" y="155" textAnchor="middle" className={styles.centerSub2}>
-              Citation Verification
-            </text>
-          </g>
-
-          {/* Output Dossier */}
-          <g className={styles.outputNode}>
-            <rect
-              x="620"
-              y="85"
-              width="120"
+              width="105"
               height="80"
-              rx="10"
-              className={styles.outputBox}
+              rx="6"
+              className={styles.nodeBox}
             />
-            <text x="680" y="120" textAnchor="middle" className={styles.outputTitle}>
-              Consensus Dossier
+            <text x="692" y="132" textAnchor="middle" className={styles.nodeTitle}>
+              writer_agent
             </text>
-            <text x="680" y="145" textAnchor="middle" className={styles.outputSub}>
-              Confidence: 89.4%
+            <text x="692" y="152" textAnchor="middle" className={styles.nodeSub}>
+              Dossier Report
             </text>
           </g>
         </svg>
       </div>
 
+      {/* ── Interactive Agent Inspector ── */}
       {mode === 'full' && (
         <div className={styles.telemetryFooter}>
-          <div className={styles.personaCard}>
-            <span className={styles.personaLabel}>Inspected Agent Debate Stream:</span>
-            <span className={styles.personaText}>
-              {activePersona === 'bull' &&
-                'Bull Persona: Citing 10-K gross margin inflection and customer expansion.'}
-              {activePersona === 'bear' &&
-                'Bear Persona: Challenging debt maturity concentration and working capital drag.'}
-              {activePersona === 'risk' &&
-                'Risk Persona: Evaluating scenario sensitivity under 50bps rate volatility.'}
-            </span>
+          <div className={styles.inspectorTabs}>
+            {(['financial', 'news', 'critic', 'refiner', 'writer'] as AgentKey[]).map(
+              (k) => (
+                <button
+                  key={k}
+                  type="button"
+                  className={`${styles.tabBtn} ${activeAgent === k ? styles.tabActive : ''}`}
+                  onClick={() => setActiveAgent(k)}
+                >
+                  {k}_agent.py
+                </button>
+              ),
+            )}
+          </div>
+
+          <div className={styles.inspectorCard}>
+            <div className={styles.cardHeader}>
+              <span className={styles.agentHeading}>{agent.name}</span>
+              <span className={styles.agentFile}>{agent.file}</span>
+            </div>
+            <p className={styles.agentDesc}>{agent.description}</p>
+            <div className={styles.metaRow}>
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>TOOLS &amp; APIS:</span>
+                <span className={styles.metaVal}>{agent.tools.join(', ')}</span>
+              </div>
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>INPUT:</span>
+                <span className={styles.metaVal}>{agent.input}</span>
+              </div>
+              <div className={styles.metaItem}>
+                <span className={styles.metaLabel}>OUTPUT:</span>
+                <span className={styles.metaVal}>{agent.output}</span>
+              </div>
+            </div>
           </div>
         </div>
       )}

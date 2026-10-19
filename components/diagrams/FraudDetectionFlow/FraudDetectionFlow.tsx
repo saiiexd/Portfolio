@@ -42,7 +42,9 @@ export default function FraudDetectionFlow({ mode = 'full' }: Props) {
         <div className={styles.statusPill}>
           <span className={styles.pulseDot} />
           <span className={styles.systemName}>STREAMING FRAUD DETECTION PIPELINE</span>
-          <span className={styles.engineTag}>Kafka · Redis · Scikit-learn</span>
+          <span className={styles.engineTag}>
+            Kafka · PySpark · Scikit-learn · PostgreSQL
+          </span>
         </div>
         <div className={styles.telemetryStats}>
           <span className={styles.statItem}>
@@ -50,13 +52,13 @@ export default function FraudDetectionFlow({ mode = 'full' }: Props) {
             <span className={styles.statVal}>Apache Kafka</span>
           </span>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>FEATURE STORE</span>
-            <span className={styles.statVal}>Redis Sliding Window</span>
+            <span className={styles.statLabel}>STREAM ENGINE</span>
+            <span className={styles.statVal}>PySpark Structured Streaming</span>
           </span>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>CLASSIFIER</span>
+            <span className={styles.statLabel}>DECISION SINK</span>
             <span className={`${styles.statVal} ${styles.highlight}`}>
-              Scikit-learn Online
+              PostgreSQL + DLQ
             </span>
           </span>
         </div>

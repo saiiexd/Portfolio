@@ -32,7 +32,7 @@ export default function RetailAnalyticsDiagram({ mode = 'full' }: Props) {
           <span className={styles.statItem}>
             <span className={styles.statLabel}>DATA ENGINE</span>
             <span className={`${styles.statVal} ${styles.highlight}`}>
-              PostgreSQL Star Schema
+              PostgreSQL (retail_transactions)
             </span>
           </span>
         </div>

@@ -93,15 +93,15 @@ export default function WorkflowOrchestratorDiagram({ mode = 'full' }: Props) {
             strokeWidth="2.5"
           />
 
-          {/* Animated data pulses */}
-          <circle r="4" fill="#38E1D2" filter="url(#dagGlow)">
+          {/* Animated data pulses - Monochrome */}
+          <circle r="4" fill="#ffffff" filter="url(#dagGlow)">
             <animateMotion
               path="M 140 130 C 180 130, 210 70, 270 70 L 430 70 C 490 70, 500 130, 560 130"
               dur="3s"
               repeatCount="indefinite"
             />
           </circle>
-          <circle r="4" fill="#0052FF" filter="url(#dagGlow)">
+          <circle r="4" fill="#bdbdbd" filter="url(#dagGlow)">
             <animateMotion
               path="M 140 130 C 180 130, 210 190, 270 190 L 430 190 C 490 190, 500 130, 560 130"
               dur="3.2s"

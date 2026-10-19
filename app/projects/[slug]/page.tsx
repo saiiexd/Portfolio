@@ -145,7 +145,7 @@ export default async function ProjectPage({ params }: Props) {
               <span className={styles.metaLabel}>04 {'//'} VERIFICATION</span>
               <span className={styles.metaValueHighlight}>
                 <CheckCircle2 size={12} className={styles.metaCheck} />
-                100% Tested &amp; Active
+                Source Code Verified
               </span>
             </div>
           </div>

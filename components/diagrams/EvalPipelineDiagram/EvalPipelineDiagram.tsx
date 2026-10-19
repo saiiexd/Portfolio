@@ -1,312 +1,232 @@
 'use client'
 
 import { useState } from 'react'
+import { CheckCircle2, Sliders, Database, Cpu, ShieldCheck } from 'lucide-react'
 import styles from './EvalPipelineDiagram.module.scss'
 
 interface Props {
   mode?: 'full' | 'preview'
 }
 
+type EvaluatorCriterion = 'exact_match' | 'normalized_sim' | 'bert_score' | 'llm_judge'
+
 export default function EvalPipelineDiagram({ mode = 'full' }: Props) {
-  const [activeStage, setActiveStage] = useState<
-    'retrieval' | 'generation' | 'eval' | 'metrics'
-  >('eval')
-  const [activeExperiment, setActiveExperiment] = useState<'prompt-a' | 'prompt-b'>(
-    'prompt-b',
-  )
+  const [activeCriterion, setActiveCriterion] = useState<EvaluatorCriterion>('bert_score')
+  const [activeStep, setActiveStep] = useState<number>(3)
+
+  const criterionDetails = {
+    exact_match: {
+      name: 'ExactMatchEvaluator',
+      module: 'llm_reliability.evaluation.evaluators',
+      description:
+        'Case-insensitive exact string match against reference answer. Baseline conformance check.',
+      sampleScore: '1.0 (Pass) or 0.0 (Fail)',
+      behavior:
+        'Reports "not applicable" if no reference answer is provided rather than failing the test case.',
+      testAssertion: 'assert result.score in (0.0, 1.0)',
+    },
+    normalized_sim: {
+      name: 'NormalizedSimilarityEvaluator',
+      module: 'llm_reliability.evaluation.normalization',
+      description:
+        'Whitespace, punctuation, and case normalized string similarity for robust textual comparison.',
+      sampleScore: '0.865 (Continuous)',
+      behavior:
+        'Strips diacritics, normalizes Unicode apostrophes and spaces before computing character overlap.',
+      testAssertion: 'assert 0.0 <= result.score <= 1.0',
+    },
+    bert_score: {
+      name: 'BertScoreBackend (Semantic Similarity)',
+      module: 'llm_reliability.evaluation.semantic_similarity',
+      description:
+        'Contextual token embedding cosine similarity using bert-score library with lazy import.',
+      sampleScore: '0.912 F1 (Semantic)',
+      behavior:
+        'Computes precision, recall, and F1 across token embeddings; uses fake backend for deterministic tests.',
+      testAssertion: 'assert result.score >= threshold',
+    },
+    llm_judge: {
+      name: 'LLMJudge (Model-as-a-Judge)',
+      module: 'llm_reliability.evaluation.llm_judge',
+      description:
+        'Structured rubric evaluation with reasoning explanation and numerical rating extracted via regex.',
+      sampleScore: '4.5 / 5.0 (Rubric)',
+      behavior:
+        'Executes a referee prompt with scoring criteria, returning a structured judgment and diagnostic trace.',
+      testAssertion: 'assert judgment.reasoning and judgment.score > 0',
+    },
+  }[activeCriterion]
 
   return (
     <div className={`${styles.wrapper} ${mode === 'preview' ? styles.previewMode : ''}`}>
-      {/* ── System Header & Architecture Context ── */}
+      {/* ── System Telemetry Header ── */}
       <div className={styles.telemetryBar}>
         <div className={styles.statusPill}>
           <span className={styles.pulseDot} />
-          <span className={styles.systemName}>RAGAS EVALUATION HARNESS</span>
-          <span className={styles.versionTag}>Deterministic Pipeline</span>
+          <span className={styles.systemName}>
+            LLM RELIABILITY &amp; EVALUATION ENGINE
+          </span>
+          <span className={styles.versionTag}>Python 3.13 · Pytest · BERTScore</span>
         </div>
         <div className={styles.telemetryStats}>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>FRAMEWORK</span>
-            <span className={styles.statVal}>RAG Triad</span>
+            <span className={styles.statLabel}>INPUT MODEL</span>
+            <span className={styles.statVal}>TestCase / Dataset</span>
           </span>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>ORCHESTRATION</span>
-            <span className={styles.statVal}>FastAPI Async</span>
+            <span className={styles.statLabel}>EXECUTION</span>
+            <span className={styles.statVal}>EvaluationRunner</span>
           </span>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>EVALUATION DIMENSIONS</span>
-            <span className={`${styles.statVal} ${styles.highlight}`}>3 Stages</span>
+            <span className={styles.statLabel}>SERIALIZATION</span>
+            <span className={`${styles.statVal} ${styles.highlight}`}>
+              Deterministic RunResult
+            </span>
           </span>
         </div>
       </div>
 
-      {/* ── Pipeline Architecture Visual (SVG & Interactive Nodes) ── */}
+      {/* ── 4-Stage Architecture Canvas ── */}
       <div className={styles.pipelineCanvas}>
-        <svg
-          viewBox="0 0 880 260"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className={styles.svgCanvas}
-        >
-          <defs>
-            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.2)" />
-              <stop offset="50%" stopColor="#bdbdbd" />
-              <stop offset="100%" stopColor="#ffffff" />
-            </linearGradient>
-            <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(255, 255, 255, 0.2)" />
-              <stop offset="100%" stopColor="#ffffff" />
-            </linearGradient>
-            <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-
-          {/* Connectors */}
-          <path
-            d="M 170 130 C 230 130, 240 130, 300 130"
-            stroke="url(#lineGrad)"
-            strokeWidth="1.5"
-            strokeDasharray="4 3"
-            className={styles.dashLine}
-          />
-          <path
-            d="M 430 130 C 470 130, 480 75, 520 75"
-            stroke="var(--color-border)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M 430 130 C 470 130, 480 130, 520 130"
-            stroke="var(--color-border-accent)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M 430 130 C 470 130, 480 185, 520 185"
-            stroke="var(--color-border)"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M 680 75 C 715 75, 725 130, 750 130"
-            stroke="url(#tealGrad)"
-            strokeWidth="1.5"
-          />
-          <path d="M 680 130 L 750 130" stroke="url(#tealGrad)" strokeWidth="1.5" />
-          <path
-            d="M 680 185 C 715 185, 725 130, 750 130"
-            stroke="url(#tealGrad)"
-            strokeWidth="1.5"
-          />
-
-          {/* Animated Stream Pulses */}
-          <circle r="3.5" fill="#ffffff" filter="url(#glowEffect)">
-            <animateMotion dur="3s" repeatCount="indefinite" path="M 170 130 L 300 130" />
-          </circle>
-          <circle r="3.5" fill="#bdbdbd" filter="url(#glowEffect)">
-            <animateMotion
-              dur="2.5s"
-              repeatCount="indefinite"
-              path="M 430 130 C 470 130, 480 130, 520 130 L 680 130 L 750 130"
-            />
-          </circle>
-        </svg>
-
-        {/* ── HTML Nodes Layer ── */}
-        <div className={styles.nodesOverlay}>
-          {/* Node 1: Query & Context */}
+        <div className={styles.stagesRow}>
+          {/* Stage 1: Dataset & TestCase */}
           <div
-            className={`${styles.pipelineCard} ${styles.nodeQuery} ${
-              activeStage === 'retrieval' ? styles.activeNode : ''
-            }`}
-            onClick={() => setActiveStage('retrieval')}
+            className={`${styles.stageCard} ${activeStep === 1 ? styles.cardActive : ''}`}
+            onClick={() => setActiveStep(1)}
           >
-            <div className={styles.cardHeader}>
-              <span className={styles.stepNum}>01</span>
-              <span className={styles.stageTag}>RETRIEVAL</span>
+            <div className={styles.cardTop}>
+              <span className={styles.stepNum}>STAGE 01</span>
+              <Database size={13} className={styles.cardIcon} />
             </div>
-            <div className={styles.cardTitle}>Prompt + Vector Chunks</div>
-            <div className={styles.nodeMeta}>
-              <span>k = 5 Chunks</span>
-              <span className={styles.metaBadge}>Cos: 0.84</span>
-            </div>
+            <div className={styles.cardTitle}>Dataset &amp; TestCases</div>
+            <p className={styles.cardDesc}>
+              Deterministic test inputs with stable IDs and optional reference answers
+            </p>
+            <div className={styles.cardFooter}>Dataset.from_json()</div>
           </div>
 
-          {/* Node 2: Model Inference */}
+          <div className={styles.flowConnector} />
+
+          {/* Stage 2: Model Adapter */}
           <div
-            className={`${styles.pipelineCard} ${styles.nodeInference} ${
-              activeStage === 'generation' ? styles.activeNode : ''
-            }`}
-            onClick={() => setActiveStage('generation')}
+            className={`${styles.stageCard} ${activeStep === 2 ? styles.cardActive : ''}`}
+            onClick={() => setActiveStep(2)}
           >
-            <div className={styles.cardHeader}>
-              <span className={styles.stepNum}>02</span>
-              <span className={styles.stageTag}>GENERATION</span>
+            <div className={styles.cardTop}>
+              <span className={styles.stepNum}>STAGE 02</span>
+              <Cpu size={13} className={styles.cardIcon} />
             </div>
-            <div className={styles.cardTitle}>LLM Generation Engine</div>
-            <div className={styles.nodeMeta}>
-              <span>Candidate Output</span>
-              <span className={styles.tempBadge}>T = 0.2</span>
-            </div>
+            <div className={styles.cardTitle}>ModelAdapter Protocol</div>
+            <p className={styles.cardDesc}>
+              Provider-agnostic interface with MockAdapter for zero-network testing
+            </p>
+            <div className={styles.cardFooter}>MockAdapter / Provider</div>
           </div>
 
-          {/* Node 3: The Evaluation Triad */}
-          <div className={styles.triadGroup}>
-            <div
-              className={`${styles.evalMiniCard} ${
-                activeStage === 'eval' ? styles.activeNode : ''
-              }`}
-              onClick={() => setActiveStage('eval')}
-            >
-              <div className={styles.evalTop}>
-                <span className={styles.evalMetric}>Faithfulness</span>
-                <span className={styles.evalScore}>0.94</span>
-              </div>
-              <div className={styles.evalBar}>
-                <div className={styles.evalFill} style={{ width: '94%' }} />
-              </div>
-            </div>
+          <div className={styles.flowConnector} />
 
-            <div
-              className={`${styles.evalMiniCard} ${
-                activeStage === 'eval' ? styles.activeNode : ''
-              }`}
-              onClick={() => setActiveStage('eval')}
-            >
-              <div className={styles.evalTop}>
-                <span className={styles.evalMetric}>Answer Relevance</span>
-                <span className={styles.evalScore}>0.89</span>
-              </div>
-              <div className={styles.evalBar}>
-                <div className={styles.evalFill} style={{ width: '89%' }} />
-              </div>
+          {/* Stage 3: Evaluator Suite */}
+          <div
+            className={`${styles.stageCard} ${activeStep === 3 ? styles.cardActive : ''}`}
+            onClick={() => setActiveStep(3)}
+          >
+            <div className={styles.cardTop}>
+              <span className={styles.stepNum}>STAGE 03</span>
+              <Sliders size={13} className={styles.cardIcon} />
             </div>
-
-            <div
-              className={`${styles.evalMiniCard} ${
-                activeStage === 'eval' ? styles.activeNode : ''
-              }`}
-              onClick={() => setActiveStage('eval')}
-            >
-              <div className={styles.evalTop}>
-                <span className={styles.evalMetric}>Context Groundedness</span>
-                <span className={styles.evalScore}>0.92</span>
-              </div>
-              <div className={styles.evalBar}>
-                <div className={styles.evalFill} style={{ width: '92%' }} />
-              </div>
-            </div>
+            <div className={styles.cardTitle}>Pluggable Evaluators</div>
+            <p className={styles.cardDesc}>
+              ExactMatch, NormalizedSim, BERTScore, and LLM Judge scoring engines
+            </p>
+            <div className={styles.cardFooter}>Evaluator.evaluate()</div>
           </div>
 
-          {/* Node 4: Decision & Telemetry */}
+          <div className={styles.flowConnector} />
+
+          {/* Stage 4: Diagnostics & RunResult */}
           <div
-            className={`${styles.pipelineCard} ${styles.nodeOutput} ${
-              activeStage === 'metrics' ? styles.activeNode : ''
-            }`}
-            onClick={() => setActiveStage('metrics')}
+            className={`${styles.stageCard} ${activeStep === 4 ? styles.cardActive : ''}`}
+            onClick={() => setActiveStep(4)}
           >
-            <div className={styles.cardHeader}>
-              <span className={styles.stepNum}>04</span>
-              <span className={`${styles.stageTag} ${styles.tealTag}`}>DECISION</span>
+            <div className={styles.cardTop}>
+              <span className={styles.stepNum}>STAGE 04</span>
+              <ShieldCheck size={13} className={styles.cardIcon} />
             </div>
-            <div className={styles.cardTitle}>Hallucination Guard</div>
-            <div className={styles.verdict}>
-              <span className={styles.passIndicator}>VERIFIED GROUNDED</span>
-            </div>
+            <div className={styles.cardTitle}>Diagnostics &amp; Report</div>
+            <p className={styles.cardDesc}>
+              Failure isolation per test case, evidence extraction, and JSON output
+            </p>
+            <div className={styles.cardFooter}>RunResult.to_json()</div>
           </div>
         </div>
       </div>
 
-      {/* ── Experiment Comparison Section (Phase Evaluation Details) ── */}
+      {/* ── Interactive Evaluator Criteria Inspector ── */}
       {mode === 'full' && (
-        <div className={styles.experimentPane}>
-          <div className={styles.experimentHeader}>
-            <div className={styles.tabHeading}>A/B PROMPT COMPARISON RUN</div>
-            <div className={styles.toggleTabs}>
+        <div className={styles.inspectorSection}>
+          <div className={styles.inspectorHeader}>
+            <span className={styles.inspectorTitle}>
+              INTERACTIVE EVALUATION CRITERIA INSPECTOR
+            </span>
+            <div className={styles.criteriaTabs}>
               <button
                 type="button"
-                className={`${styles.tabBtn} ${
-                  activeExperiment === 'prompt-a' ? styles.activeTab : ''
-                }`}
-                onClick={() => setActiveExperiment('prompt-a')}
+                className={`${styles.tabBtn} ${activeCriterion === 'exact_match' ? styles.tabActive : ''}`}
+                onClick={() => setActiveCriterion('exact_match')}
               >
-                Run #104 (Zero-Shot Baseline)
+                ExactMatch
               </button>
               <button
                 type="button"
-                className={`${styles.tabBtn} ${
-                  activeExperiment === 'prompt-b' ? styles.activeTab : ''
-                }`}
-                onClick={() => setActiveExperiment('prompt-b')}
+                className={`${styles.tabBtn} ${activeCriterion === 'normalized_sim' ? styles.tabActive : ''}`}
+                onClick={() => setActiveCriterion('normalized_sim')}
               >
-                Run #118 (Few-Shot + Grounding Guardrail) ★
+                NormalizedSim
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${activeCriterion === 'bert_score' ? styles.tabActive : ''}`}
+                onClick={() => setActiveCriterion('bert_score')}
+              >
+                BERTScore (Semantic)
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${activeCriterion === 'llm_judge' ? styles.tabActive : ''}`}
+                onClick={() => setActiveCriterion('llm_judge')}
+              >
+                LLM Judge
               </button>
             </div>
           </div>
 
-          <div className={styles.metricsGrid}>
-            <div className={styles.metricCard}>
-              <div className={styles.metricLabel}>FAITHFULNESS SCORE</div>
-              <div className={styles.metricValue}>
-                {activeExperiment === 'prompt-a' ? '0.73' : '0.94'}
-                <span
-                  className={
-                    activeExperiment === 'prompt-b' ? styles.deltaUp : styles.deltaDown
-                  }
-                >
-                  {activeExperiment === 'prompt-b' ? '+28.7%' : 'Baseline'}
-                </span>
-              </div>
-              <p className={styles.metricSub}>
-                Claims directly attributed to context document chunks
-              </p>
+          <div className={styles.detailsGrid}>
+            <div className={styles.detailBox}>
+              <span className={styles.detailKey}>EVALUATOR CLASS</span>
+              <span className={styles.detailValMono}>{criterionDetails.name}</span>
             </div>
-
-            <div className={styles.metricCard}>
-              <div className={styles.metricLabel}>ANSWER RELEVANCE</div>
-              <div className={styles.metricValue}>
-                {activeExperiment === 'prompt-a' ? '0.78' : '0.91'}
-                <span
-                  className={
-                    activeExperiment === 'prompt-b' ? styles.deltaUp : styles.deltaDown
-                  }
-                >
-                  {activeExperiment === 'prompt-b' ? '+16.6%' : 'Baseline'}
-                </span>
-              </div>
-              <p className={styles.metricSub}>
-                Cosine semantic similarity between query intent & generated answer
-              </p>
+            <div className={styles.detailBox}>
+              <span className={styles.detailKey}>SOURCE MODULE</span>
+              <span className={styles.detailValMono}>{criterionDetails.module}</span>
             </div>
-
-            <div className={styles.metricCard}>
-              <div className={styles.metricLabel}>HALLUCINATION RATE</div>
-              <div className={styles.metricValue}>
-                {activeExperiment === 'prompt-a' ? '18.4%' : '2.1%'}
-                <span
-                  className={
-                    activeExperiment === 'prompt-b' ? styles.deltaUp : styles.deltaDown
-                  }
-                >
-                  {activeExperiment === 'prompt-b' ? '-88.5%' : 'High Risk'}
-                </span>
-              </div>
-              <p className={styles.metricSub}>
-                Unsupported entity and numerical claims detected by referee model
-              </p>
+            <div className={styles.detailBox}>
+              <span className={styles.detailKey}>SCORE FORMAT</span>
+              <span className={styles.detailValHighlight}>
+                {criterionDetails.sampleScore}
+              </span>
             </div>
-
-            <div className={styles.metricCard}>
-              <div className={styles.metricLabel}>AVG P95 LATENCY</div>
-              <div className={styles.metricValue}>
-                {activeExperiment === 'prompt-a' ? '1.24s' : '1.38s'}
-                <span className={styles.neutral}>
-                  {activeExperiment === 'prompt-b' ? '+140ms' : 'Fast'}
-                </span>
-              </div>
-              <p className={styles.metricSub}>
-                End-to-end evaluation overhead per transaction sample
-              </p>
+            <div className={styles.detailBox}>
+              <span className={styles.detailKey}>TEST SPECIFICATION</span>
+              <span className={styles.detailValMono}>
+                {criterionDetails.testAssertion}
+              </span>
+            </div>
+            <div className={`${styles.detailBox} ${styles.fullWidthDetail}`}>
+              <span className={styles.detailKey}>
+                OPERATIONAL BEHAVIOR &amp; FAILURE ISOLATION
+              </span>
+              <p className={styles.detailParagraph}>{criterionDetails.description}</p>
+              <p className={styles.detailSub}>{criterionDetails.behavior}</p>
             </div>
           </div>
         </div>

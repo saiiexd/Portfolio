@@ -56,9 +56,9 @@ export default function AiWorkspaceDiagram({ mode = 'full' }: Props) {
             <span className={styles.statVal}>HNSW (Cosine Distance)</span>
           </span>
           <span className={styles.statItem}>
-            <span className={styles.statLabel}>ASYNC WORKERS</span>
+            <span className={styles.statLabel}>BACKGROUND TASKS</span>
             <span className={`${styles.statVal} ${styles.highlight}`}>
-              Celery + Redis
+              FastAPI Async Tasks
             </span>
           </span>
         </div>
@@ -94,9 +94,9 @@ export default function AiWorkspaceDiagram({ mode = 'full' }: Props) {
               <span className={styles.nodeNum}>02</span>
               <Cpu size={14} className={styles.nodeIcon} />
             </div>
-            <div className={styles.nodeTitle}>Embedding Worker</div>
+            <div className={styles.nodeTitle}>Embedding Vectorizer</div>
             <p className={styles.nodeDesc}>OpenAI text-embedding-3-small vectorizer</p>
-            <div className={styles.nodeMeta}>Celery Background Task</div>
+            <div className={styles.nodeMeta}>FastAPI BackgroundTask</div>
           </div>
 
           <div className={styles.flowArrow}>

@@ -221,7 +221,9 @@ export default function ExoIntelArchitecture({ mode = 'full' }: Props) {
 
           <div className={styles.verdictBar}>
             <div className={styles.verdictLeft}>
-              <span className={styles.modelTag}>XGBOOST + 1D-CNN ENSEMBLE:</span>
+              <span className={styles.modelTag}>
+                GRADIENT BOOSTING &amp; RF ENSEMBLE + SHAP:
+              </span>
               <span className={styles.verdictText}>{targetData.classification}</span>
             </div>
             <span className={styles.confBadge}>{targetData.confidence}</span>

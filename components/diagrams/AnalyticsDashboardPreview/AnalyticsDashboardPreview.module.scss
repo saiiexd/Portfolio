@@ -57,6 +57,16 @@
   color: var(--color-ink);
 }
 
+.versionTag {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
 .illustrativeTag {
   font-family: var(--font-mono), monospace;
   font-size: 10px;
@@ -71,6 +81,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .statItem {
@@ -108,6 +119,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-3);
+  align-items: stretch;
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(2, 1fr);
@@ -121,11 +133,36 @@
 .stageCard {
   display: flex;
   flex-direction: column;
-  padding: var(--space-3);
+  padding: var(--space-4);
   background: var(--color-bg-subtle);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
   gap: var(--space-2);
+  transition: border-color var(--duration-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+  }
+
+  &.stageActive {
+    border-color: var(--color-ink);
+    background: var(--color-bg-card);
+  }
+}
+
+.stageTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+
+.cardIcon {
+  color: var(--color-graphite);
+}
+
+.flowArrow {
+  display: none;
 }
 
 .stageIndex {
@@ -167,4 +204,156 @@
     border-radius: 2px;
     color: var(--color-graphite);
   }
+}
+
+/* ── Interactive SQL View Inspector ── */
+.inspectorSection {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  padding: var(--space-4) var(--space-5);
+}
+
+.inspectorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.inspectorTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.viewTabs {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+
+  &:hover {
+    color: var(--color-ink);
+    border-color: var(--color-graphite);
+  }
+
+  &.tabActive {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+    font-weight: 700;
+  }
+}
+
+.viewDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  font-size: 11px;
+
+  > div {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+}
+
+.metaLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  color: var(--color-text-tertiary);
+  font-weight: 700;
+}
+
+.metaValMono {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.metaVal {
+  color: var(--color-text-secondary);
+}
+
+.viewDescription {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  background: var(--color-bg-card);
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: left;
+
+  th {
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-bg-subtle);
+    border-bottom: 1px solid var(--color-border);
+    font-family: var(--font-mono), monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.monoCell {
+  font-family: var(--font-mono), monospace;
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.tagPill {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  padding: 1px 6px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-graphite);
 }
