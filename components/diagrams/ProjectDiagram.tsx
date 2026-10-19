@@ -35,6 +35,30 @@ const VerdictAiDiagram = dynamic(() => import('./VerdictAiDiagram/VerdictAiDiagr
   ssr: true,
 })
 
+const AiWorkspaceDiagram = dynamic(
+  () => import('./AiWorkspaceDiagram/AiWorkspaceDiagram'),
+  { ssr: true },
+)
+
+const DistributedStreamingDiagram = dynamic(
+  () => import('./DistributedStreamingDiagram/DistributedStreamingDiagram'),
+  { ssr: true },
+)
+
+const RagFirstPrinciplesDiagram = dynamic(
+  () => import('./RagFirstPrinciplesDiagram/RagFirstPrinciplesDiagram'),
+  { ssr: true },
+)
+
+const OfflineOcrDiagram = dynamic(() => import('./OfflineOcrDiagram/OfflineOcrDiagram'), {
+  ssr: true,
+})
+
+const RetailAnalyticsDiagram = dynamic(
+  () => import('./RetailAnalyticsDiagram/RetailAnalyticsDiagram'),
+  { ssr: true },
+)
+
 interface Props {
   componentName?: string
   slug?: string
@@ -58,6 +82,7 @@ export default function ProjectDiagram({ componentName, slug, mode = 'full' }: P
       return <WorkflowOrchestratorDiagram mode={mode} />
 
     case 'FraudDetectionFlow':
+    case 'real-time-fraud-detection':
     case 'fraud-detection':
       return <FraudDetectionFlow mode={mode} />
 
@@ -72,6 +97,26 @@ export default function ProjectDiagram({ componentName, slug, mode = 'full' }: P
     case 'VerdictAiDiagram':
     case 'verdict-ai':
       return <VerdictAiDiagram mode={mode} />
+
+    case 'AiWorkspaceDiagram':
+    case 'ai-workspace':
+      return <AiWorkspaceDiagram mode={mode} />
+
+    case 'DistributedStreamingDiagram':
+    case 'distributed-event-streaming':
+      return <DistributedStreamingDiagram mode={mode} />
+
+    case 'RagFirstPrinciplesDiagram':
+    case 'rag-from-scratch':
+      return <RagFirstPrinciplesDiagram mode={mode} />
+
+    case 'OfflineOcrDiagram':
+    case 'offline-ocr':
+      return <OfflineOcrDiagram mode={mode} />
+
+    case 'RetailAnalyticsDiagram':
+    case 'retail-analytics':
+      return <RetailAnalyticsDiagram mode={mode} />
 
     default:
       return null

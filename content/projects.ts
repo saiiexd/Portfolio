@@ -333,6 +333,7 @@ export const PROJECTS: ProjectData[] = [
     limitations:
       'Embedding generation requires an active OpenAI API key for indexing new documents.',
     repoUrl: 'https://github.com/saiiexd/ai-workspace',
+    diagramComponent: 'AiWorkspaceDiagram',
   },
   {
     slug: 'distributed-event-streaming',
@@ -382,6 +383,7 @@ export const PROJECTS: ProjectData[] = [
     limitations:
       'Simulated multi-broker cluster requires Docker Compose deployment; production workloads necessitate multi-node cloud Kafka deployments.',
     repoUrl: 'https://github.com/saiiexd/Distributed-Event-Streaming-Platform',
+    diagramComponent: 'DistributedStreamingDiagram',
   },
   {
     slug: 'rag-from-scratch',
@@ -417,6 +419,7 @@ export const PROJECTS: ProjectData[] = [
     limitations:
       'In-memory NumPy matrix search is tailored for single-document analysis rather than enterprise corpora exceeding 100,000 document vectors.',
     repoUrl: 'https://github.com/saiiexd/rag-from-scratch',
+    diagramComponent: 'RagFirstPrinciplesDiagram',
   },
   {
     slug: 'offline-ocr',
@@ -452,6 +455,7 @@ export const PROJECTS: ProjectData[] = [
     limitations:
       'Optimized for printed text and standard document scans; complex handwritten text requires specialized handwriting recognition models.',
     repoUrl: 'https://github.com/saiiexd/offline-ocr',
+    diagramComponent: 'OfflineOcrDiagram',
   },
   {
     slug: 'retail-analytics',
@@ -487,6 +491,7 @@ export const PROJECTS: ProjectData[] = [
     limitations:
       'Forecasts reflect historical sales patterns; sudden promotional events or supply chain disruptions require manual parameter adjustments.',
     repoUrl: 'https://github.com/saiiexd/retail-analytics-platform',
+    diagramComponent: 'RetailAnalyticsDiagram',
   },
 ]
 

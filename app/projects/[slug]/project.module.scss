@@ -1,32 +1,75 @@
 @use '@/styles/tokens' as *;
 
 .page {
-  padding-top: calc(64px + var(--space-12));
+  padding-top: calc(72px + var(--space-8));
   min-height: 100vh;
   background-color: var(--color-bg-base);
 }
 
 .container {
-  max-width: 920px;
+  max-width: 1280px;
   margin-inline: auto;
-  padding-inline: var(--layout-gutter);
+  padding-inline: clamp(1rem, 3.5vw, 2.5rem);
   padding-bottom: var(--space-32);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// ── Top Telemetry & Navigation Bar ──────────────────────────────────────────
+.telemetryBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), monospace;
   font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
+  font-weight: 700;
+  color: var(--color-ink);
   text-decoration: none;
-  margin-bottom: var(--space-8);
   transition: color var(--transition-fast);
 
   &:hover {
-    color: var(--color-ink);
+    color: var(--color-graphite);
   }
+}
+
+.telemetryPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--color-graphite);
+  flex-wrap: wrap;
+}
+
+.telemetryPill {
+  font-weight: 600;
+}
+
+.telemetryDivider {
+  color: var(--color-border);
+}
+
+.verifiedTag {
+  color: var(--color-ink);
+  font-weight: 700;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
 }
 
 .warningBanner {
@@ -43,8 +86,7 @@
   line-height: 1.6;
 }
 
-// ── Header ─────────────────────────────────────────────────────────────────────
-
+// ── Opening Composition (Hero) ──────────────────────────────────────────────
 .header {
   display: flex;
   flex-direction: column;
@@ -52,139 +94,375 @@
   margin-bottom: var(--space-12);
 }
 
-.headerMeta {
+.headerTop {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  justify-content: space-between;
+  width: 100%;
 }
 
-.year,
-.status {
+.headerIndex {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-xs);
-  color: var(--color-text-tertiary);
-  letter-spacing: 0.04em;
+  font-weight: 800;
+  color: var(--color-graphite);
+  letter-spacing: 0.08em;
 }
 
 .title {
   font-family: var(--font-syne), sans-serif;
-  font-size: clamp(var(--text-2xl), 5vw, 3.5rem);
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
   color: var(--color-ink);
+  margin: 0;
+  max-width: 24ch;
 }
 
 .lead {
-  font-size: var(--text-md);
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.65;
   color: var(--color-text-secondary);
-  max-width: 65ch;
+  max-width: 78ch;
+  margin: 0;
 }
 
-.techStack {
+// ── Metadata Matrix (4 Cells) ───────────────────────────────────────────────
+.metaMatrix {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+
+  @media (min-width: 860px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.metaCell {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  color: var(--color-ink);
-  text-decoration: none;
-  padding: 8px 16px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xs);
-  background: var(--color-bg-card);
+}
+
+.metaLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--color-graphite);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.metaValue {
+  font-size: 12px;
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.repoValueLink {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--color-ink);
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.metaValueHighlight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.metaCheck {
+  color: var(--color-ink);
+}
+
+// ── Actions Bar ─────────────────────────────────────────────────────────────
+.actionsBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.primaryRepoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--color-paper);
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  padding: 10px 20px;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
   transition: all var(--transition-fast);
 
   &:hover {
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: var(--color-graphite);
+    border-color: var(--color-graphite);
+    transform: translateY(-1px);
+  }
+}
+
+.secondaryDemoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: 10px 18px;
+  border-radius: var(--radius-xs);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+
+  &:hover {
     border-color: var(--color-ink);
   }
 }
 
-// ── Diagram Section ───────────────────────────────────────────────────────────
+.scrollStageBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--color-graphite);
+  text-decoration: none;
+  padding: 10px 14px;
+  transition: color var(--transition-fast);
 
-.diagramSection {
+  &:hover {
+    color: var(--color-ink);
+  }
+}
+
+.techStackRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding-top: var(--space-2);
+}
+
+.techStackLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-graphite);
+  letter-spacing: 0.05em;
+}
+
+.techPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+// ── Substantial Architecture Stage ──────────────────────────────────────────
+.architectureStage {
   width: 100%;
-  margin-bottom: var(--space-12);
-  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-16);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--color-border);
+  background: #111111;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
-// ── Body ────────────────────────────────────────────────────────────────────────
-
-.body {
+.stageFrameHeader {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-12);
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.section {
+.stageHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stageDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}
+
+.stageTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+}
+
+.stageHeaderRight {
+  display: flex;
+  align-items: center;
+}
+
+.stageBadge {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  color: #888888;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+}
+
+.stageCanvasInner {
+  width: 100%;
+}
+
+// ── Visual Technical Narrative ──────────────────────────────────────────────
+.narrativeGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  margin-bottom: var(--space-20);
+
+  @media (min-width: 860px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.chapterCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding-top: var(--space-8);
-  border-top: 1px solid var(--color-border);
 }
 
-.sectionHeading {
+.fullWidthChapter {
+  grid-column: 1 / -1;
+}
+
+.chapterHeader {
   display: flex;
   align-items: baseline;
-  gap: var(--space-4);
-  font-family: var(--font-syne), sans-serif;
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--color-ink);
-  letter-spacing: -0.02em;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.sectionIndex {
+.chapterNum {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-xs);
+  font-weight: 800;
   color: var(--color-graphite);
-  letter-spacing: 0.04em;
-  font-weight: 700;
 }
 
-.sectionText {
+.chapterTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.chapterText {
   font-size: var(--text-base);
   line-height: 1.75;
   color: var(--color-text-secondary);
-  max-width: 72ch;
+  margin: 0;
 }
 
-// ── Key Decisions ─────────────────────────────────────────────────────────────
-
-.decisions {
+// Pipeline container inside Chapter 03
+.pipelineContainer {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-2);
 }
 
-.decision {
-  padding: var(--space-6);
-  background: var(--color-bg-card);
+.pipelineTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-graphite);
+  letter-spacing: 0.05em;
+}
+
+.flowIcon {
+  color: var(--color-ink);
+}
+
+// Decisions Grid inside Chapter 04
+.decisionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.decisionBlock {
+  padding: var(--space-5);
+  background: var(--color-bg-base);
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-ink);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+.decisionHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.decisionIcon {
+  color: var(--color-ink);
+}
+
+.decisionIndex {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-graphite);
+  letter-spacing: 0.06em;
 }
 
 .decisionTitle {
@@ -192,10 +470,125 @@
   font-size: var(--text-base);
   font-weight: 700;
   color: var(--color-ink);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.rationaleBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.rationaleLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-graphite);
 }
 
 .decisionRationale {
   font-size: var(--text-sm);
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--color-text-secondary);
+  margin: 0;
+}
+
+// ── Continuous Project-to-Project Navigation ────────────────────────────────
+.paginationSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-border);
+}
+
+.paginationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.paginationOverline {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-graphite);
+  letter-spacing: 0.08em;
+}
+
+.paginationArchiveLink {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.paginationGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+
+  @media (min-width: 680px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.paginationCard {
+  padding: var(--space-6);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.paginationNext {
+  text-align: right;
+
+  .pagMeta {
+    justify-content: flex-end;
+  }
+}
+
+.pagMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-graphite);
+}
+
+.pagTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.pagCategory {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
 }

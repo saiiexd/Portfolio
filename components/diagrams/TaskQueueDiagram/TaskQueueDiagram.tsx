@@ -18,7 +18,7 @@ export default function TaskQueueDiagram({ mode = 'full' }: Props) {
         <div className={styles.statusPill}>
           <span className={styles.pulseDot} />
           <span className={styles.systemName}>DISTRIBUTED QUEUE COORDINATION</span>
-          <span className={styles.techTag}>FastAPI · Redis · Celery</span>
+          <span className={styles.techTag}>FastAPI · Redis Streams · Go</span>
         </div>
         <div className={styles.telemetryStats}>
           <span className={styles.statItem}>
