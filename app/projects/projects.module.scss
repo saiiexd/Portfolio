@@ -119,13 +119,57 @@
   width: 100%;
 }
 
+.toolbarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .filterBar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-border);
-  width: 100%;
+}
+
+.viewModeToggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  padding: 3px;
+  gap: 2px;
+}
+
+.viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: calc(var(--radius-xs) - 1px);
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--color-ink);
+  }
+
+  &.viewBtnActive {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
 }
 
 .filterBtn {
@@ -520,4 +564,202 @@
     color: var(--color-ink);
     border-color: var(--color-ink);
   }
+}
+
+// ── Living Network Matrix View ──────────────────────────────────────────────
+.networkViewWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.networkHeaderBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 12px 18px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  flex-wrap: wrap;
+}
+
+.networkHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.networkPulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.1);
+  animation: netPulse 2s infinite ease-in-out;
+}
+
+@keyframes netPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.4;
+  }
+}
+
+.networkHeaderLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+}
+
+.networkHeaderHint {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans), sans-serif;
+  margin: 0;
+}
+
+.networkCanvasFrame {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+
+  @media (max-width: 768px) {
+    height: 480px;
+  }
+}
+
+.networkDirectory {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.networkDirectoryHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-2);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.networkDirectoryTitle {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+}
+
+.networkDirectoryDesc {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--color-graphite);
+}
+
+.networkDirectoryGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.directoryCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  &.directoryCardActive {
+    border-color: var(--color-ink);
+    background: var(--color-bg-subtle);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+}
+
+.directoryCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.directoryYear {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--color-graphite);
+}
+
+.directoryTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-ink);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.directoryExcerpt {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.directoryTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+.directoryTag {
+  font-family: var(--font-mono), monospace;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-graphite);
 }

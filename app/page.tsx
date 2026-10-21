@@ -3,7 +3,15 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Download, ArrowUpRight, Check, Copy } from 'lucide-react'
+import {
+  ArrowRight,
+  Download,
+  ArrowUpRight,
+  Check,
+  Copy,
+  Network,
+  Activity,
+} from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from '@/components/atoms/Icon/BrandIcons'
 import Badge from '@/components/atoms/Badge/Badge'
 import Button from '@/components/atoms/Button/Button'
@@ -11,13 +19,17 @@ import { getFeaturedProjects } from '@/content/projects'
 import { SITE_CONFIG, RESUME_PATH } from '@/lib/constants'
 import { categoryLabel } from '@/lib/utils'
 import ProjectDiagram from '@/components/diagrams/ProjectDiagram'
-import TopologyCanvas from '@/components/diagrams/TopologyCanvas/TopologyCanvas'
 import ArchitectureFlow from '@/components/molecules/ArchitectureFlow/ArchitectureFlow'
-import LaboratoryExplorer from '@/components/molecules/LaboratoryExplorer/LaboratoryExplorer'
+import LivingNetworkCanvas from '@/components/molecules/LivingNetwork/LivingNetworkCanvas'
+import LivingNetworkDossier from '@/components/molecules/LivingNetwork/LivingNetworkDossier'
+import SkillProjectMatrix from '@/components/molecules/SkillProjectMatrix/SkillProjectMatrix'
+import type { ProjectData } from '@/types'
 import styles from './HeroSection.module.scss'
 
 export default function HomePage() {
   const [copiedEmail, setCopiedEmail] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
+  const [selectedDomain, setSelectedDomain] = useState<string | null>(null)
 
   // 4 Flagship Engineering Projects
   const featuredProjects = getFeaturedProjects().slice(0, 4)
@@ -30,14 +42,14 @@ export default function HomePage() {
 
   return (
     <div className={styles.homeContainer}>
-      {/* ── 01: Hero Section (Zajno-Inspired Cinematic Composition) ─────── */}
+      {/* ── 01: Hero Section (The Living Network Experience) ─────────────── */}
       <section className={styles.hero} aria-label="Engineering Identity">
         {/* Top Telemetry Header Ribbon */}
         <div className={styles.telemetryBar}>
           <div className={styles.telemetryInner}>
             <span className={styles.telemetryItem}>
               <span className={styles.statusDot} />
-              SYSTEM_STATUS: NOMINAL
+              THE_LIVING_NETWORK // ACTIVE
             </span>
             <span className={styles.telemetryDivider}>{'//'}</span>
             <span className={styles.telemetryItem}>
@@ -60,7 +72,7 @@ export default function HomePage() {
             <div className={styles.heroMain}>
               <div className={styles.nameOverline}>
                 <span>SAI VENKAT</span>
-                <span className={styles.subTag}>ENGINEERING PORTFOLIO</span>
+                <span className={styles.subTag}>THE LIVING NETWORK</span>
               </div>
 
               <h1 className={styles.heroHeadline}>
@@ -106,38 +118,77 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right: Integrated Portrait & Interactive 3D Topology */}
-            <div className={styles.visualStage}>
-              <div className={styles.visualCanvasFrame}>
-                <TopologyCanvas />
-                <div className={styles.canvasLegend}>
-                  <span className={styles.legendDot} />
-                  <span>INTERACTIVE NEURAL LATTICE // THREE.JS</span>
+            {/* Right: Integrated Portrait & Telemetry Card */}
+            <div className={styles.portraitComposition}>
+              <div className={styles.portraitCard}>
+                <div className={styles.portraitFrame}>
+                  <Image
+                    src="/images/sai-venkat-portrait.png"
+                    alt="Sai Venkat monochrome engineering portrait"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 360px"
+                    className={styles.portraitImg}
+                  />
                 </div>
-              </div>
-
-              <div className={styles.portraitComposition}>
-                <div className={styles.portraitCard}>
-                  <div className={styles.portraitFrame}>
-                    <Image
-                      src="/images/sai-venkat-portrait.png"
-                      alt="Sai Venkat monochrome engineering portrait"
-                      fill
-                      priority
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 360px"
-                      className={styles.portraitImg}
-                    />
-                  </div>
-                  <div className={styles.portraitCaption}>
-                    <span className={styles.captionTitle}>SAI VENKAT</span>
-                    <span className={styles.captionRole}>CLASS OF 2027</span>
-                  </div>
+                <div className={styles.portraitCaption}>
+                  <span className={styles.captionTitle}>SAI VENKAT // 2027</span>
+                  <span className={styles.captionRole}>HYDERABAD, INDIA</span>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* ── Centerpiece: Interactive Living Network Stage ── */}
+          <div className={styles.livingNetworkStage}>
+            <div className={styles.stageHeaderRow}>
+              <div className={styles.stageHeaderLeft}>
+                <span className={styles.liveStatusDot} />
+                <span className={styles.stageLabel}>
+                  THE LIVING NETWORK // TOPOLOGICAL MATRIX
+                </span>
+              </div>
+              <span className={styles.stageHint}>
+                [INTERACTIVE] TAP OR CLICK ANY NODE TO INSPECT ARCHITECTURAL DATAFLOW
+              </span>
+            </div>
+
+            <div className={styles.stageCanvasBox}>
+              <LivingNetworkCanvas
+                onSelectProject={(p) => {
+                  setSelectedProject(p)
+                  setSelectedDomain(null)
+                }}
+                onSelectDomain={(d) => {
+                  setSelectedDomain(d)
+                  setSelectedProject(null)
+                }}
+                selectedProjectId={selectedProject?.slug}
+                selectedDomainId={selectedDomain}
+                mode="hero"
+              />
+            </div>
+          </div>
+
+          {/* Scroll Bridge Connector */}
+          <div className={styles.networkScrollBridge}>
+            <a href="#selected-work" className={styles.scrollBridgeLink}>
+              <span>SCROLL TO EXPLORE SYSTEMS</span>
+              <div className={styles.scrollBridgeLine} />
+            </a>
+          </div>
         </div>
       </section>
+
+      {/* Living Network Dossier Modal */}
+      <LivingNetworkDossier
+        project={selectedProject}
+        domainCategory={selectedDomain}
+        onClose={() => {
+          setSelectedProject(null)
+          setSelectedDomain(null)
+        }}
+      />
 
       {/* ── 02: Selected Work Showcase (Zajno Exhibition Layout) ───────── */}
       <section
@@ -280,21 +331,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 03: Interactive Systems Laboratory ─────────────────────────── */}
-      <section className={styles.labSection} aria-labelledby="lab-heading">
+      {/* ── 03: Interactive Engineering Capability Index & Relationship Matrix ── */}
+      <section className={styles.labSection} aria-labelledby="matrix-heading">
         <div className={styles.sectionInner}>
           <div className={styles.labHeader}>
-            <span className={styles.labOverline}>Capabilities ↘</span>
-            <h2 id="lab-heading" className={styles.labTitle}>
-              Systems Laboratory
+            <span className={styles.labOverline}>Index // Relationships ↘</span>
+            <h2 id="matrix-heading" className={styles.labTitle}>
+              Engineering Capability &amp; Systems Matrix
             </h2>
             <p className={styles.labSubtext}>
-              Interactive architectural exploration across my primary engineering
-              disciplines. Inspect verified implementation patterns directly.
+              Explore direct relationships between engineering disciplines, architectural
+              patterns, and verified codebase implementations. Select any capability to
+              inspect concrete evidence.
             </p>
           </div>
 
-          <LaboratoryExplorer />
+          <SkillProjectMatrix />
         </div>
       </section>
 

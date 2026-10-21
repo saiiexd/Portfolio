@@ -29,29 +29,29 @@ export const TECH_FOCUS_AREAS: TechFocusArea[] = [
     id: 'llm-evaluation',
     label: 'LLM Evaluation & Reliability',
     description:
-      'Deterministic evaluation harnesses measuring RAG triad faithfulness, answer relevance, groundedness, and hallucination rates across open-source and proprietary models.',
-    tools: ['RAGAS', 'LangChain', 'OpenAI API', 'HuggingFace', 'Python'],
+      'Deterministic evaluation harnesses measuring exact match, normalized semantic similarity, and model-based arbitration across deterministic datasets.',
+    tools: ['Python 3.13', 'Pytest', 'BERTScore', 'LLM Judge', 'JSON Schema'],
   },
   {
     id: 'distributed-systems',
     label: 'Distributed Systems & Backend',
     description:
-      'Fault-tolerant asynchronous execution systems, Redis Streams message brokers, concurrent worker pools, state machines, exponential retries, and dead-letter queues.',
-    tools: ['Redis', 'Celery', 'FastAPI', 'Docker', 'PostgreSQL'],
+      'Fault-tolerant asynchronous execution systems, Redis Streams message brokers, concurrent Go worker pools, topological DAG schedulers, and dead-letter queues.',
+    tools: ['Go 1.22', 'Redis Streams', 'FastAPI', 'PostgreSQL 16', 'Docker'],
   },
   {
     id: 'ml-data-engineering',
     label: 'ML Pipelines & Streaming',
     description:
-      'Real-time event streaming pipelines with Kafka ingestion, low-latency feature stores, online ML inference, and automated data modeling with dbt.',
-    tools: ['Apache Spark', 'dbt', 'Kafka', 'Pandas', 'Scikit-learn'],
+      'Real-time event streaming pipelines with Kafka ingestion, PySpark Structured Streaming window aggregations, Scikit-learn inference, and Prophet demand forecasts.',
+    tools: ['Apache Kafka', 'PySpark', 'Scikit-learn', 'Prophet', 'PostgreSQL'],
   },
   {
     id: 'applied-ai',
     label: 'Applied AI & Multi-Agent Systems',
     description:
-      'Multi-agent collaborative debate platforms, hybrid vector retrieval, air-gapped OCR extraction, and autonomous analytical workflows.',
-    tools: ['Multi-Agent', 'LlamaIndex', 'Vector DB', 'PyTorch', 'TypeScript'],
+      'Multi-agent collaborative state graph debate platforms, pgvector HNSW similarity search, air-gapped OpenCV OCR, and first-principles NumPy RAG.',
+    tools: ['LangGraph', 'pgvector', 'OpenCV', 'Tesseract 5', 'Cohere API'],
   },
 ]
 

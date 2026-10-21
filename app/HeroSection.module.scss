@@ -279,6 +279,110 @@
   letter-spacing: 0.08em;
 }
 
+// ── Living Network Hero Stage ────────────────────────────────────────────────
+.livingNetworkStage {
+  margin-top: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.stageHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-1);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stageHeaderLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.liveStatusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.stageLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+}
+
+.stageHint {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0.06em;
+}
+
+.stageCanvasBox {
+  width: 100%;
+  height: 520px;
+  min-height: 480px;
+
+  @media (min-width: 1024px) {
+    height: 620px;
+  }
+}
+
+.networkScrollBridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-8);
+  gap: var(--space-2);
+}
+
+.scrollBridgeLink {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-graphite);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    color: var(--color-ink);
+    transform: translateY(2px);
+  }
+}
+
+.scrollBridgeLine {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--color-graphite), transparent);
+  animation: pulseBridge 2s infinite ease-in-out;
+}
+
+@keyframes pulseBridge {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
 // ── 02: Selected Work Showcase (Zajno Exhibition) ───────────────────────────
 
 .workSection {
