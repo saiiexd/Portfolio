@@ -3,15 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-  ArrowRight,
-  Download,
-  ArrowUpRight,
-  Check,
-  Copy,
-  Network,
-  Activity,
-} from 'lucide-react'
+import { ArrowRight, Download, Check, Copy } from 'lucide-react'
 import { GithubIcon, LinkedinIcon } from '@/components/atoms/Icon/BrandIcons'
 import Badge from '@/components/atoms/Badge/Badge'
 import Button from '@/components/atoms/Button/Button'
@@ -19,10 +11,8 @@ import { getFeaturedProjects } from '@/content/projects'
 import { SITE_CONFIG, RESUME_PATH } from '@/lib/constants'
 import { categoryLabel } from '@/lib/utils'
 import ProjectDiagram from '@/components/diagrams/ProjectDiagram'
-import ArchitectureFlow from '@/components/molecules/ArchitectureFlow/ArchitectureFlow'
 import LivingNetworkCanvas from '@/components/molecules/LivingNetwork/LivingNetworkCanvas'
 import LivingNetworkDossier from '@/components/molecules/LivingNetwork/LivingNetworkDossier'
-import SkillProjectMatrix from '@/components/molecules/SkillProjectMatrix/SkillProjectMatrix'
 import type { ProjectData } from '@/types'
 import styles from './HeroSection.module.scss'
 
@@ -31,8 +21,8 @@ export default function HomePage() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null)
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null)
 
-  // 4 Flagship Engineering Projects
-  const featuredProjects = getFeaturedProjects().slice(0, 4)
+  // Exactly 3 Flagship Engineering Projects across different disciplines
+  const featuredProjects = getFeaturedProjects().slice(0, 3)
 
   const copyEmail = () => {
     navigator.clipboard.writeText(SITE_CONFIG.email)
@@ -42,37 +32,15 @@ export default function HomePage() {
 
   return (
     <div className={styles.homeContainer}>
-      {/* ── 01: Hero Section (The Living Network Experience) ─────────────── */}
+      {/* ── 01: Hero Section ────────────────────────────────────────────── */}
       <section className={styles.hero} aria-label="Engineering Identity">
-        {/* Top Telemetry Header Ribbon */}
-        <div className={styles.telemetryBar}>
-          <div className={styles.telemetryInner}>
-            <span className={styles.telemetryItem}>
-              <span className={styles.statusDot} />
-              THE_LIVING_NETWORK // ACTIVE
-            </span>
-            <span className={styles.telemetryDivider}>{'//'}</span>
-            <span className={styles.telemetryItem}>
-              COORDINATES: 17.3850° N, 78.4867° E (HYDERABAD)
-            </span>
-            <span className={styles.telemetryDivider}>{'//'}</span>
-            <span className={styles.telemetryItem}>
-              ROLE: AI &amp; DATA PLATFORM ENGINEER
-            </span>
-            <span className={styles.telemetryDivider}>{'//'}</span>
-            <span className={styles.telemetryItem}>
-              AVAILABILITY: OPEN FOR 2027 ROLES
-            </span>
-          </div>
-        </div>
-
         <div className={styles.sectionInner}>
           <div className={styles.heroGrid}>
-            {/* Left: Oversized Kinetic Typography & Core Thesis */}
+            {/* Left: Oversized Typography & Introduction */}
             <div className={styles.heroMain}>
               <div className={styles.nameOverline}>
                 <span>SAI VENKAT</span>
-                <span className={styles.subTag}>THE LIVING NETWORK</span>
+                <span className={styles.subTag}>SYSTEMS &amp; AI ENGINEER</span>
               </div>
 
               <h1 className={styles.heroHeadline}>
@@ -81,8 +49,7 @@ export default function HomePage() {
               </h1>
 
               <p className={styles.heroPositioning}>
-                AI systems. Fault-tolerant distributed platforms. Real-time streaming
-                infrastructure.
+                AI systems. Distributed platforms. Real-time streaming infrastructure.
               </p>
 
               <p className={styles.heroBio}>
@@ -102,7 +69,7 @@ export default function HomePage() {
                   iconRight={<ArrowRight size={16} />}
                   data-cursor="EXPLORE"
                 >
-                  Explore Systems ↘
+                  Explore Projects ↘
                 </Button>
                 <Button
                   as="a"
@@ -118,7 +85,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right: Integrated Portrait & Telemetry Card */}
+            {/* Right: Integrated Monochrome Portrait */}
             <div className={styles.portraitComposition}>
               <div className={styles.portraitCard}>
                 <div className={styles.portraitFrame}>
@@ -139,20 +106,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Centerpiece: Interactive Living Network Stage ── */}
+          {/* Centerpiece: Interactive Living Network Stage */}
           <div className={styles.livingNetworkStage}>
-            <div className={styles.stageHeaderRow}>
-              <div className={styles.stageHeaderLeft}>
-                <span className={styles.liveStatusDot} />
-                <span className={styles.stageLabel}>
-                  THE LIVING NETWORK // TOPOLOGICAL MATRIX
-                </span>
-              </div>
-              <span className={styles.stageHint}>
-                [INTERACTIVE] TAP OR CLICK ANY NODE TO INSPECT ARCHITECTURAL DATAFLOW
-              </span>
-            </div>
-
             <div className={styles.stageCanvasBox}>
               <LivingNetworkCanvas
                 onSelectProject={(p) => {
@@ -169,14 +124,6 @@ export default function HomePage() {
               />
             </div>
           </div>
-
-          {/* Scroll Bridge Connector */}
-          <div className={styles.networkScrollBridge}>
-            <a href="#selected-work" className={styles.scrollBridgeLink}>
-              <span>SCROLL TO EXPLORE SYSTEMS</span>
-              <div className={styles.scrollBridgeLine} />
-            </a>
-          </div>
         </div>
       </section>
 
@@ -190,43 +137,39 @@ export default function HomePage() {
         }}
       />
 
-      {/* ── 02: Selected Work Showcase (Zajno Exhibition Layout) ───────── */}
+      {/* ── 02: Selected Work (3 Featured Projects) ─────────────────────── */}
       <section
         id="selected-work"
         className={styles.workSection}
         aria-labelledby="work-heading"
       >
         <div className={styles.sectionInner}>
-          {/* Editorial Section Header */}
           <div className={styles.workHeader}>
             <div className={styles.workHeaderLeft}>
-              <span className={styles.workOverline}>Work ↘</span>
+              <span className={styles.workOverline}>Selected Work ↘</span>
               <h2 id="work-heading" className={styles.workTitle}>
                 Featured Engineering Systems
               </h2>
             </div>
             <div className={styles.workHeaderRight}>
               <p className={styles.workIntro}>
-                A curated sequence of verified platforms engineered for evaluation rigor,
-                distributed concurrency, topological workflow dispatch, and streaming
-                anomaly detection.
+                Three verified platforms spanning deterministic LLM evaluation,
+                distributed queue concurrency, and real-time Kafka event streaming.
               </p>
               <Link
                 href="/projects"
                 className={styles.archiveHeaderLink}
                 data-cursor="ALL 12"
               >
-                <span>View Complete Archive (12 Repositories)</span>
-                <ArrowRight size={14} />
+                <span>Complete Archive (12 Systems) →</span>
               </Link>
             </div>
           </div>
 
-          {/* Exhibition List */}
           <div className={styles.workExhibitionList}>
             {featuredProjects.map((project, idx) => (
               <article key={project.slug} className={styles.exhibitionRow}>
-                {/* Row Meta Column */}
+                {/* Meta Column */}
                 <div className={styles.exhibitionMetaCol}>
                   <div className={styles.rowIndexWrap}>
                     <span className={styles.rowIndex}>0{idx + 1} ↘</span>
@@ -235,7 +178,7 @@ export default function HomePage() {
                   <span className={styles.rowYear}>{project.year}</span>
                 </div>
 
-                {/* Content & Action Column */}
+                {/* Content Column */}
                 <div className={styles.exhibitionBodyCol}>
                   <div className={styles.titleWrap}>
                     <h3 className={styles.exhibitionTitle}>
@@ -250,18 +193,9 @@ export default function HomePage() {
                     <p className={styles.exhibitionDesc}>{project.shortDescription}</p>
                   </div>
 
-                  {/* Architecture Dataflow */}
-                  {project.pipelineSteps && project.pipelineSteps.length > 0 && (
-                    <div className={styles.architectureFlowBox}>
-                      <span className={styles.flowLabel}>SYSTEM DATAFLOW</span>
-                      <ArchitectureFlow steps={project.pipelineSteps} />
-                    </div>
-                  )}
-
-                  {/* Tags & Action Buttons */}
                   <div className={styles.exhibitionBottomRow}>
                     <div className={styles.exhibitionTags}>
-                      {project.techStack.map((tech) => (
+                      {project.techStack.slice(0, 4).map((tech) => (
                         <Badge key={tech} variant="tech">
                           {tech}
                         </Badge>
@@ -274,26 +208,14 @@ export default function HomePage() {
                         className={styles.caseStudyLink}
                         data-cursor="CASE STUDY"
                       >
-                        <span>Case Study</span>
-                        <ArrowRight size={13} />
+                        <span>Explore Case Study</span>
+                        <ArrowRight size={14} />
                       </Link>
-                      {project.repoUrl && (
-                        <a
-                          href={project.repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={styles.repoLink}
-                          data-cursor="GITHUB ↗"
-                        >
-                          <span>GitHub</span>
-                          <ArrowUpRight size={13} />
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Interactive Visual Preview Stage */}
+                {/* Visual Preview Column */}
                 <div className={styles.exhibitionVisualCol}>
                   <div className={styles.visualCardStage}>
                     <ProjectDiagram
@@ -310,13 +232,13 @@ export default function HomePage() {
           {/* Full Archive Gateway Banner */}
           <div className={styles.archiveBanner}>
             <div className={styles.archiveBannerContent}>
-              <span className={styles.archiveBannerOverline}>REPOSITORY ARCHIVE</span>
+              <span className={styles.archiveBannerOverline}>COMPLETE CATALOG</span>
               <h3 className={styles.archiveBannerTitle}>
-                Explore the Complete 12-System Engineering Catalog
+                Explore All 12 Verified Systems &amp; Architectures
               </h3>
               <p className={styles.archiveBannerSub}>
-                Every public repository is verified against real source code,
-                dependencies, and architecture diagrams.
+                Every project is verified against real source code, schema migrations, and
+                test suites.
               </p>
             </div>
             <Link
@@ -324,44 +246,117 @@ export default function HomePage() {
               className={styles.archiveBannerBtn}
               data-cursor="ARCHIVE ↗"
             >
-              <span>Access All 12 Projects</span>
+              <span>Access Systems Archive (12)</span>
               <ArrowRight size={16} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ── 03: Interactive Engineering Capability Index & Relationship Matrix ── */}
-      <section className={styles.labSection} aria-labelledby="matrix-heading">
+      {/* ── 03: Engineering Focus (Compact 3 Domains) ───────────────────── */}
+      <section className={styles.focusSection} aria-labelledby="focus-heading">
         <div className={styles.sectionInner}>
-          <div className={styles.labHeader}>
-            <span className={styles.labOverline}>Index // Relationships ↘</span>
-            <h2 id="matrix-heading" className={styles.labTitle}>
-              Engineering Capability &amp; Systems Matrix
+          <div className={styles.focusHeader}>
+            <span className={styles.focusOverline}>Domains // Focus ↘</span>
+            <h2 id="focus-heading" className={styles.focusTitle}>
+              Engineering Focus
             </h2>
-            <p className={styles.labSubtext}>
-              Explore direct relationships between engineering disciplines, architectural
-              patterns, and verified codebase implementations. Select any capability to
-              inspect concrete evidence.
+            <p className={styles.focusSubtext}>
+              Core technical disciplines explored through authentic software
+              implementations.
             </p>
           </div>
 
-          <SkillProjectMatrix />
+          <div className={styles.focusGrid}>
+            {/* Domain 1: AI & GenAI */}
+            <div className={styles.focusCard}>
+              <span className={styles.focusIndex}>01 // DOMAIN</span>
+              <h3 className={styles.focusCardTitle}>AI &amp; GenAI</h3>
+              <p className={styles.focusCardDesc}>
+                Deterministic evaluation harnesses measuring exact match, normalized
+                semantic similarity, model-based arbitration, and multi-agent debate
+                workflows.
+              </p>
+              <div className={styles.focusCardTags}>
+                <span>Python 3.13</span>
+                <span>FastAPI</span>
+                <span>LangGraph</span>
+                <span>pgvector</span>
+              </div>
+              <Link
+                href="/projects?category=llm-genai"
+                className={styles.focusCardLink}
+                data-cursor="EXPLORE"
+              >
+                <span>Explore AI Systems (4)</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            {/* Domain 2: Distributed Systems */}
+            <div className={styles.focusCard}>
+              <span className={styles.focusIndex}>02 // DOMAIN</span>
+              <h3 className={styles.focusCardTitle}>Distributed Systems</h3>
+              <p className={styles.focusCardDesc}>
+                Fault-tolerant asynchronous execution engines, Redis Streams consumer
+                groups with Go worker pools, and topological DAG scheduling.
+              </p>
+              <div className={styles.focusCardTags}>
+                <span>Go 1.22</span>
+                <span>Redis Streams</span>
+                <span>SQLite</span>
+                <span>Docker</span>
+              </div>
+              <Link
+                href="/projects?category=backend-systems"
+                className={styles.focusCardLink}
+                data-cursor="EXPLORE"
+              >
+                <span>Explore Distributed Systems (3)</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            {/* Domain 3: Data Engineering & ML */}
+            <div className={styles.focusCard}>
+              <span className={styles.focusIndex}>03 // DOMAIN</span>
+              <h3 className={styles.focusCardTitle}>Data &amp; Machine Learning</h3>
+              <p className={styles.focusCardDesc}>
+                Real-time event streaming with Apache Kafka, PySpark Structured Streaming
+                window aggregations, astronomical transient detection, and relational
+                warehousing.
+              </p>
+              <div className={styles.focusCardTags}>
+                <span>Apache Kafka</span>
+                <span>PySpark</span>
+                <span>PostgreSQL</span>
+                <span>LightGBM</span>
+              </div>
+              <Link
+                href="/projects?category=ml-data"
+                className={styles.focusCardLink}
+                data-cursor="EXPLORE"
+              >
+                <span>Explore Data &amp; ML Systems (5)</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── 04: Engineering Ledger (Experience & Academics) ────────────── */}
+      {/* ── 04: Experience & Education ──────────────────────────────────── */}
       <section className={styles.ledgerSection} aria-labelledby="ledger-heading">
         <div className={styles.sectionInner}>
           <div className={styles.ledgerHeader}>
             <span className={styles.ledgerOverline}>Background ↘</span>
             <h2 id="ledger-heading" className={styles.ledgerTitle}>
-              Engineering Ledger
+              Education &amp; Experience
             </h2>
           </div>
 
           <div className={styles.ledgerTable}>
-            {/* Row 1: University */}
+            {/* Entry 1: Education */}
             <div className={styles.ledgerRow}>
               <div className={styles.ledgerTimeCol}>
                 <span className={styles.ledgerTime}>2023 — 2027</span>
@@ -373,24 +368,18 @@ export default function HomePage() {
                   B.Tech in Computer Science and Engineering (AI &amp; Data Engineering)
                 </p>
                 <p className={styles.ledgerDetail}>
-                  Focus on distributed systems, machine learning algorithms, database
-                  internals, and large-scale data platforms. Cumulative GPA:{' '}
+                  Coursework in distributed computing, machine learning, database
+                  internals, and large-scale data systems. Cumulative GPA:{' '}
                   <strong>7.46</strong>.
                 </p>
-                <div className={styles.ledgerPills}>
-                  <span>Phagwara, Punjab</span>
-                  <span>Data Structures &amp; Algorithms</span>
-                  <span>Distributed Systems</span>
-                  <span>Machine Learning</span>
-                </div>
               </div>
             </div>
 
-            {/* Row 2: Systems Architecture */}
+            {/* Entry 2: Open Source Engineering */}
             <div className={styles.ledgerRow}>
               <div className={styles.ledgerTimeCol}>
                 <span className={styles.ledgerTime}>2024 — PRESENT</span>
-                <span className={styles.ledgerBadge}>OPEN SOURCE WORK</span>
+                <span className={styles.ledgerBadge}>OPEN SOURCE ARCHITECTURE</span>
               </div>
               <div className={styles.ledgerMainCol}>
                 <h3 className={styles.ledgerOrg}>
@@ -400,35 +389,28 @@ export default function HomePage() {
                   AI/ML Engineer · Distributed Systems · Data Platform Engineer
                 </p>
                 <p className={styles.ledgerDetail}>
-                  Independent design, implementation, and benchmarking of 12 full-stack
-                  engineering systems: evaluation harnesses, Redis Streams task queues,
-                  topological workflow engines, and Kafka KRaft event pipelines.
+                  Architected, benchmarked, and maintained 12 public codebases spanning
+                  deterministic LLM evaluation, Redis Streams worker queues, topological
+                  DAG workflow schedulers, and Kafka event pipelines.
                 </p>
-                <div className={styles.ledgerPills}>
-                  <span>19 GitHub Repositories</span>
-                  <span>Apache Kafka</span>
-                  <span>Redis Streams</span>
-                  <span>Python &amp; Go</span>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 05: Cinematic Contact Finale ──────────────────────────────── */}
+      {/* ── 05: Contact Panel ───────────────────────────────────────────── */}
       <section className={styles.finaleSection} aria-labelledby="finale-heading">
         <div className={styles.sectionInner}>
           <div className={styles.finaleCard}>
             <div className={styles.finaleTop}>
-              <span className={styles.finaleOverline}>CONTACT // CO-ENGINEER ↘</span>
+              <span className={styles.finaleOverline}>CONTACT ↘</span>
               <h2 id="finale-heading" className={styles.finaleTitle}>
                 Let&apos;s engineer something extraordinary.
               </h2>
               <p className={styles.finaleDesc}>
-                Actively interviewing for AI/ML Engineer, Applied AI, and Data Platform
-                roles (Class of 2027). Response turnaround is typically within 1 business
-                day.
+                Open for 2027 software engineering, AI systems, and backend infrastructure
+                roles.
               </p>
             </div>
 
@@ -488,10 +470,6 @@ export default function HomePage() {
                   <Download size={15} />
                   <span>Official Résumé</span>
                 </a>
-                <span className={styles.socialDivider}>·</span>
-                <Link href="/contact" className={styles.socialBtn} data-cursor="FORM">
-                  <span>Send Direct Message →</span>
-                </Link>
               </div>
             </div>
           </div>

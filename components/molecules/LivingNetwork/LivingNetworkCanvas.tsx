@@ -465,7 +465,19 @@ export default function LivingNetworkCanvas({
           ctx.fillText(node.label.toUpperCase(), 0, node.radius + 16)
         } else {
           // Project Node
-          const r = node.radius + (isSelected ? 3 : 0)
+          const isFlagship =
+            node.id === 'llm-eval-platform' ||
+            node.id === 'distributed-task-queue' ||
+            node.id === 'realtime-event-streaming'
+
+          const isPrimaryVisible =
+            isFlagship ||
+            isSelected ||
+            isHovered ||
+            isDomainActive ||
+            mode === 'standalone'
+
+          const r = (isPrimaryVisible ? node.radius : 4.5) + (isSelected ? 3 : 0)
 
           // Selection Halo
           if (isSelected || isHovered) {
@@ -479,27 +491,46 @@ export default function LivingNetworkCanvas({
           // Project Body
           ctx.beginPath()
           ctx.arc(0, 0, r, 0, Math.PI * 2)
-          ctx.fillStyle = isSelected ? '#ffffff' : '#161616'
+          ctx.fillStyle = isSelected
+            ? '#ffffff'
+            : isPrimaryVisible
+              ? '#161616'
+              : '#222222'
           ctx.strokeStyle =
-            isHovered || isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.4)'
-          ctx.lineWidth = 1.25
+            isHovered || isSelected
+              ? '#ffffff'
+              : isPrimaryVisible
+                ? 'rgba(255, 255, 255, 0.45)'
+                : 'rgba(255, 255, 255, 0.18)'
+          ctx.lineWidth = isSelected ? 1.5 : 1
           ctx.fill()
           ctx.stroke()
 
           // Inner Core
-          ctx.beginPath()
-          ctx.arc(0, 0, 3, 0, Math.PI * 2)
-          ctx.fillStyle = isSelected ? '#111111' : '#bdbdbd'
-          ctx.fill()
+          if (isPrimaryVisible) {
+            ctx.beginPath()
+            ctx.arc(0, 0, isSelected ? 3.5 : 2.5, 0, Math.PI * 2)
+            ctx.fillStyle = isSelected ? '#111111' : '#ffffff'
+            ctx.fill()
+          }
 
-          // Text Label (abbreviated or title)
-          ctx.font = '500 9px monospace'
-          ctx.fillStyle =
-            isSelected || isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.65)'
-          ctx.textAlign = 'center'
-          const displayLabel =
-            node.label.length > 20 ? `${node.label.slice(0, 18)}..` : node.label
-          ctx.fillText(displayLabel, 0, r + 13)
+          // Text Label — only drawn when purposefully visible!
+          const shouldDrawLabel =
+            isSelected ||
+            isHovered ||
+            isDomainActive ||
+            (mode === 'standalone' && isFlagship) ||
+            (mode === 'hero' && isFlagship && !activeSelection)
+
+          if (shouldDrawLabel) {
+            ctx.font = '500 9px monospace'
+            ctx.fillStyle =
+              isSelected || isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.75)'
+            ctx.textAlign = 'center'
+            const displayLabel =
+              node.label.length > 20 ? `${node.label.slice(0, 18)}..` : node.label
+            ctx.fillText(displayLabel, 0, r + 13)
+          }
         }
 
         ctx.restore()
@@ -515,7 +546,7 @@ export default function LivingNetworkCanvas({
       window.removeEventListener('resize', resize)
       mediaQuery.removeEventListener('change', handleMotionChange)
     }
-  }, [initialNodes, initialEdges, activeSelection, hoveredNode, isReducedMotion])
+  }, [initialNodes, initialEdges, activeSelection, hoveredNode, isReducedMotion, mode])
 
   // Mouse & Touch interaction handlers
   const handlePointerMove = useCallback(
@@ -610,22 +641,20 @@ export default function LivingNetworkCanvas({
         onPointerDown={handlePointerClick}
       />
 
-      {/* Network Header HUD */}
-      <div className={styles.hudOverlayTop}>
-        <div className={styles.statusIndicator}>
-          <span className={styles.pulseDot} />
-          <span className={styles.hudMono}>
-            THE LIVING NETWORK // ARCHITECTURAL TOPOLOGY
-          </span>
+      {/* Network Header HUD (Only in standalone archive mode) */}
+      {mode === 'standalone' && (
+        <div className={styles.hudOverlayTop}>
+          <div className={styles.statusIndicator}>
+            <span className={styles.pulseDot} />
+            <span className={styles.hudMono}>TOPOLOGY MATRIX // 12 SYSTEMS</span>
+          </div>
+          <div className={styles.hudStats}>
+            <span>4 DOMAINS</span>
+            <span className={styles.divider}>·</span>
+            <span>ACTIVE SIGNALS</span>
+          </div>
         </div>
-        <div className={styles.hudStats}>
-          <span>4 DOMAINS</span>
-          <span className={styles.divider}>·</span>
-          <span>12 VERIFIED NODES</span>
-          <span className={styles.divider}>·</span>
-          <span>ACTIVE SIGNALS</span>
-        </div>
-      </div>
+      )}
 
       {/* Floating Controls HUD */}
       <div className={styles.hudOverlayBottom}>
@@ -635,7 +664,7 @@ export default function LivingNetworkCanvas({
             className={`${styles.filterBtn} ${!activeSelection ? styles.filterActive : ''}`}
             onClick={resetSelection}
           >
-            All 12 Systems
+            All Domains
           </button>
           {DOMAIN_NODES.map((d) => (
             <button
@@ -653,7 +682,7 @@ export default function LivingNetworkCanvas({
                 }
               }}
             >
-              {d.code} {'//'} {d.label}
+              {d.label}
             </button>
           ))}
         </div>

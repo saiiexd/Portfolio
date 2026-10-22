@@ -18,60 +18,6 @@
   box-sizing: border-box;
 }
 
-// ── 01: Hero Telemetry Header Ribbon ─────────────────────────────────────────
-
-.telemetryBar {
-  width: 100%;
-  background: #111111;
-  color: #a0a0a0;
-  border-bottom: 1px solid #222222;
-  padding: 8px 0;
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.telemetryInner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  max-width: 1320px;
-  margin-inline: auto;
-  padding-inline: clamp(1rem, 3.5vw, 3rem);
-}
-
-.telemetryItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.statusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-  animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.telemetryDivider {
-  color: #444444;
-}
-
 // ── 01: Hero Main Section ───────────────────────────────────────────────────
 
 .hero {
@@ -284,102 +230,16 @@
   margin-top: var(--space-12);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   width: 100%;
-}
-
-.stageHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--space-1);
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.stageHeaderLeft {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.liveStatusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-ink);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-}
-
-.stageLabel {
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--color-ink);
-}
-
-.stageHint {
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  color: var(--color-text-tertiary);
-  letter-spacing: 0.06em;
 }
 
 .stageCanvasBox {
   width: 100%;
   height: 520px;
-  min-height: 480px;
+  min-height: 460px;
 
   @media (min-width: 1024px) {
-    height: 620px;
-  }
-}
-
-.networkScrollBridge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: var(--space-8);
-  gap: var(--space-2);
-}
-
-.scrollBridgeLink {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-graphite);
-  text-decoration: none;
-  transition: all var(--transition-fast);
-
-  &:hover {
-    color: var(--color-ink);
-    transform: translateY(2px);
-  }
-}
-
-.scrollBridgeLine {
-  width: 1px;
-  height: 32px;
-  background: linear-gradient(to bottom, var(--color-graphite), transparent);
-  animation: pulseBridge 2s infinite ease-in-out;
-}
-
-@keyframes pulseBridge {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scaleY(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scaleY(1);
+    height: 600px;
   }
 }
 
@@ -742,9 +602,9 @@
   }
 }
 
-// ── 03: Systems Laboratory Section ──────────────────────────────────────────
+// ── 03: Engineering Focus Section ───────────────────────────────────────────
 
-.labSection {
+.focusSection {
   position: relative;
   padding-top: var(--space-16);
   padding-bottom: var(--space-20);
@@ -757,7 +617,7 @@
   }
 }
 
-.labHeader {
+.focusHeader {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -765,7 +625,7 @@
   max-width: 70ch;
 }
 
-.labOverline {
+.focusOverline {
   font-family: var(--font-mono), monospace;
   font-size: var(--text-xs);
   font-weight: 700;
@@ -773,7 +633,7 @@
   color: var(--color-graphite);
 }
 
-.labTitle {
+.focusTitle {
   font-family: var(--font-syne), sans-serif;
   font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 800;
@@ -782,10 +642,98 @@
   line-height: 1.1;
 }
 
-.labSubtext {
+.focusSubtext {
   font-size: var(--text-base);
   color: var(--color-text-secondary);
   line-height: 1.65;
+}
+
+.focusGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+
+  @media (min-width: 860px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.focusCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-ink);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.focusIndex {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-graphite);
+}
+
+.focusCardTitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+
+.focusCardDesc {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+  flex-grow: 1;
+}
+
+.focusCardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: var(--space-1);
+
+  span {
+    font-family: var(--font-mono), monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    color: var(--color-text-secondary);
+  }
+}
+
+.focusCardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-decoration: none;
+  padding-top: var(--space-2);
+  transition: gap var(--transition-fast);
+
+  &:hover {
+    gap: 10px;
+  }
 }
 
 // ── 04: Engineering Ledger Section ──────────────────────────────────────────
